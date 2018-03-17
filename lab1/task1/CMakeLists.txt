@@ -8,10 +8,14 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 #shared
+
 add_library(cArrayShared SHARED ${SOURCES})
 
 #static
+add_definitions(-DSTATIC)
 add_library(cArrayStatic STATIC ${SOURCES})
+remove_definitions(-DSTATIC)
+
 
 install(TARGETS cArrayShared cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
 install(TARGETS cArrayShared DESTINATION /usr/lib)

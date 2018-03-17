@@ -4,6 +4,32 @@
 #include <limits.h>
 #include "carray.h"
 
+#ifdef STATIC
+
+struct array arr;
+arr.tabSize = 1000;
+arr.wordSize = 10;
+arr.sizeUsed = 0;
+int globalArray[1000][10];
+arr.arr = globalArray;
+
+void addCharBlock(struct array arr, int* block) {
+
+    if(arr.sizeUsed >= arr.tabSize) {
+        printf("Array is full\n");
+        return;
+      }
+
+      arr.arr[arr.sizeUsed] = block;
+      arr.sizeUsed += 1;
+}
+
+
+
+#endif
+
+#ifndef STATIC
+
 struct array createArrayOfStringPtrs(int tabSize, int wordSize) {
 
     struct array newArr;
@@ -35,6 +61,7 @@ void addCharBlock(struct array arr, int* block) {
 void deinitArray(struct array arr) {
      free(arr.arr);
 }
+#endif
 
 int* findClosestElement(struct array arr) {
 
