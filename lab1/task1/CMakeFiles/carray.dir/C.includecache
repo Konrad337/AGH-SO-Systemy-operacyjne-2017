@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/konrad/Desktop/SO/lab1/task1/carray.c
+stdlib.h
+-
+math.h
+-
+limits.h
+-
+carray.h
+/home/konrad/Desktop/SO/lab1/task1/carray.h
+
+/home/konrad/Desktop/SO/lab1/task1/carray.h
+

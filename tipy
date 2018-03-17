@@ -1,0 +1,8 @@
+Nie pisać ręcznie mejkfajla !!!
+
+CMAKE, autotoolsy
+
+Nie kopiować do dyanamicznego, lepiej flagi i warunkowe kompilacje
+#ifdynamic #ifelse #endif Jeden plik źródłowy w cmejku są polecenia które definują flagi kompilacji
+czas zegarowy - gettimeofday
+czas uzytkownika - get getrusage
