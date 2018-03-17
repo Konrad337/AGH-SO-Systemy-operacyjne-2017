@@ -60,39 +60,76 @@ CMAKE_SOURCE_DIR = /home/konrad/Desktop/SO/lab1/task1
 CMAKE_BINARY_DIR = /home/konrad/Desktop/SO/lab1/task1
 
 #=============================================================================
-# Target rules for target CMakeFiles/carray.dir
+# Target rules for target CMakeFiles/cArrayStatic.dir
 
 # All Build rule for target.
-CMakeFiles/carray.dir/all:
-	$(MAKE) -f CMakeFiles/carray.dir/build.make CMakeFiles/carray.dir/depend
-	$(MAKE) -f CMakeFiles/carray.dir/build.make CMakeFiles/carray.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/lab1/task1/CMakeFiles --progress-num=1,2 "Built target carray"
-.PHONY : CMakeFiles/carray.dir/all
+CMakeFiles/cArrayStatic.dir/all:
+	$(MAKE) -f CMakeFiles/cArrayStatic.dir/build.make CMakeFiles/cArrayStatic.dir/depend
+	$(MAKE) -f CMakeFiles/cArrayStatic.dir/build.make CMakeFiles/cArrayStatic.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/lab1/task1/CMakeFiles --progress-num=3,4 "Built target cArrayStatic"
+.PHONY : CMakeFiles/cArrayStatic.dir/all
 
 # Include target in all.
-all: CMakeFiles/carray.dir/all
+all: CMakeFiles/cArrayStatic.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/carray.dir/rule: cmake_check_build_system
+CMakeFiles/cArrayStatic.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/lab1/task1/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/carray.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/cArrayStatic.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/lab1/task1/CMakeFiles 0
-.PHONY : CMakeFiles/carray.dir/rule
+.PHONY : CMakeFiles/cArrayStatic.dir/rule
 
 # Convenience name for target.
-carray: CMakeFiles/carray.dir/rule
+cArrayStatic: CMakeFiles/cArrayStatic.dir/rule
 
-.PHONY : carray
-
-# clean rule for target.
-CMakeFiles/carray.dir/clean:
-	$(MAKE) -f CMakeFiles/carray.dir/build.make CMakeFiles/carray.dir/clean
-.PHONY : CMakeFiles/carray.dir/clean
+.PHONY : cArrayStatic
 
 # clean rule for target.
-clean: CMakeFiles/carray.dir/clean
+CMakeFiles/cArrayStatic.dir/clean:
+	$(MAKE) -f CMakeFiles/cArrayStatic.dir/build.make CMakeFiles/cArrayStatic.dir/clean
+.PHONY : CMakeFiles/cArrayStatic.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/cArrayStatic.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/cArrayShared.dir
+
+# All Build rule for target.
+CMakeFiles/cArrayShared.dir/all:
+	$(MAKE) -f CMakeFiles/cArrayShared.dir/build.make CMakeFiles/cArrayShared.dir/depend
+	$(MAKE) -f CMakeFiles/cArrayShared.dir/build.make CMakeFiles/cArrayShared.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/lab1/task1/CMakeFiles --progress-num=1,2 "Built target cArrayShared"
+.PHONY : CMakeFiles/cArrayShared.dir/all
+
+# Include target in all.
+all: CMakeFiles/cArrayShared.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/cArrayShared.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/lab1/task1/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/cArrayShared.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/lab1/task1/CMakeFiles 0
+.PHONY : CMakeFiles/cArrayShared.dir/rule
+
+# Convenience name for target.
+cArrayShared: CMakeFiles/cArrayShared.dir/rule
+
+.PHONY : cArrayShared
+
+# clean rule for target.
+CMakeFiles/cArrayShared.dir/clean:
+	$(MAKE) -f CMakeFiles/cArrayShared.dir/build.make CMakeFiles/cArrayShared.dir/clean
+.PHONY : CMakeFiles/cArrayShared.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/cArrayShared.dir/clean
 
 .PHONY : clean
 

@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -O3 -DNDEBUG  -shared -Wl,-soname,libcArrayShared.so -o bin/libcArrayShared.so CMakeFiles/cArrayShared.dir/carray.c.o 

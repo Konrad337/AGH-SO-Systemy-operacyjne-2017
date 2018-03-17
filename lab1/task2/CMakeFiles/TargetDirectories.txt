@@ -1,0 +1,4 @@
+/home/konrad/Desktop/SO/lab1/task2/CMakeFiles/edit_cache.dir
+/home/konrad/Desktop/SO/lab1/task2/CMakeFiles/static.dir
+/home/konrad/Desktop/SO/lab1/task2/CMakeFiles/rebuild_cache.dir
+/home/konrad/Desktop/SO/lab1/task2/CMakeFiles/shared.dir

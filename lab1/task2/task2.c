@@ -1,7 +1,7 @@
 
 #include <stdio.h>
-#include "../task1/libstat.h"
-#include "data.c"
+#include "../task1/carray.h"
+#include "data.h"
 
 int main( int argc, const char* argv[] )
 {
@@ -15,9 +15,10 @@ int main( int argc, const char* argv[] )
     // 10 [0][NaN]
 
 
-    int *tab = createArrayOfStringPtrs(10);
-    addCharBlock(tab, 10, w1, 3);
+    struct array tab = createArrayOfStringPtrs(10, 3);
+    addCharBlock(tab, w1);
 
-    printf("%i", tab[0]);
+
+    printf("%i", data[0][0]);
 
 }

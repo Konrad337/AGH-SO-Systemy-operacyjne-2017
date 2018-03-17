@@ -1,3 +1,8 @@
-/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/rebuild_cache.dir
-/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/carray.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/install/strip.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/install/local.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/cArrayStatic.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/cArrayShared.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/install.dir
 /home/konrad/Desktop/SO/lab1/task1/CMakeFiles/edit_cache.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/rebuild_cache.dir
+/home/konrad/Desktop/SO/lab1/task1/CMakeFiles/list_install_components.dir

@@ -1,0 +1,3 @@
+/home/konrad/Desktop/SO/lab1/task2/libs/libcArrayShared.so
+/home/konrad/Desktop/SO/lab1/task2/libs/libcArrayStatic.a
+/usr/lib/libcArrayShared.so

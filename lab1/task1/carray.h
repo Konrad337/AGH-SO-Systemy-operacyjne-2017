@@ -1,3 +1,7 @@
+#ifndef CARRAY_H_   /* Include guard */
+#define CARRAY_H_
+
+
 struct array {
     int tabSize;
     int wordSize;
@@ -7,8 +11,10 @@ struct array {
 
 struct array createArrayOfStringPtrs(int tabSize, int wordSize);
 
-void addintBlock(struct array arr, int* block);
+void addCharBlock(struct array arr, int* block);
 
 void deinitArray(struct array arr);
 
 int* findClosestElement(struct array arr);
+
+#endif

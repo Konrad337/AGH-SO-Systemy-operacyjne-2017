@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC   -shared -Wl,-soname,libcarray.so -o libcarray.so CMakeFiles/carray.dir/carray.c.o 

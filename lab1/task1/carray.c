@@ -19,7 +19,7 @@ struct array createArrayOfStringPtrs(int tabSize, int wordSize) {
     return newArr;
 }
 
-void addintBlock(struct array arr, int* block) {
+void addCharBlock(struct array arr, int* block) {
 
     if(arr.sizeUsed >= arr.tabSize) {
         arr.arr = (int**) realloc(arr.arr, arr.tabSize * 2 * sizeof(int*));

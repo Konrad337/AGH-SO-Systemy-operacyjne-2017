@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/libtest.dir/task2.c.o  -o bin/libtest  -L/home/konrad/Desktop/SO/lab1/task1/bin/lib -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task1/bin/lib -lcArrayShared 

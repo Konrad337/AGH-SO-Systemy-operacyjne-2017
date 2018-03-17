@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/konrad/Desktop/SO/lab1/task1/carray.h
+
+/home/konrad/Desktop/SO/lab1/task2/data.h
+
+/home/konrad/Desktop/SO/lab1/task2/task2.c
+stdio.h
+-
+../task1/carray.h
+/home/konrad/Desktop/SO/lab1/task1/carray.h
+data.h
+/home/konrad/Desktop/SO/lab1/task2/data.h
+
