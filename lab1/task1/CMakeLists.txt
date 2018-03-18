@@ -11,9 +11,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_library(cArrayShared SHARED ${SOURCES})
 install(TARGETS cArrayShared DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
 install(TARGETS cArrayShared DESTINATION /home/konrad/Desktop/SO/lab1/task3/a/libs)
+install(TARGETS cArrayShared DESTINATION /home/konrad/Desktop/SO/lab1/task3/b/libs)
+#Zamiast instalować je wszędzie można po prostu w pozostałych CMejkach dać ścieżkę tutaj, ale w sumie bez różnicy wiec zostawiam
+#sudo make install w task1, żeby grało
 
 #static
 add_library(cArrayStatic STATIC ${SOURCES})
 target_compile_definitions(cArrayStatic PUBLIC -DSTATIC)
 install(TARGETS cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
 install(TARGETS cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task3/a/libs)
+install(TARGETS cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task3/b/libs)

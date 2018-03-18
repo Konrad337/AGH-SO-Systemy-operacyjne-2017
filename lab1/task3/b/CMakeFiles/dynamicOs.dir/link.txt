@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -Os -ldl CMakeFiles/dynamicOs.dir/home/konrad/Desktop/SO/lab1/task2/data.c.o CMakeFiles/dynamicOs.dir/home/konrad/Desktop/SO/lab1/task2/task2.c.o  -o bin/dynamicOs  -L/home/konrad/Desktop/SO/lab1/task3/b/./libs 

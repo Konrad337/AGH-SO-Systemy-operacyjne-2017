@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -Os -ldl CMakeFiles/sharedO0.dir/home/konrad/Desktop/SO/lab1/task2/data.c.o CMakeFiles/sharedO0.dir/home/konrad/Desktop/SO/lab1/task2/task2.c.o  -o bin/sharedO0  -L/home/konrad/Desktop/SO/lab1/task3/b/./libs -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task3/b/./libs -lcArrayShared 

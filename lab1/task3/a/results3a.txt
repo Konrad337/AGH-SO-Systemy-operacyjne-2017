@@ -1,0 +1,88 @@
+
+./bin/dynamic 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+
+ Real time: 132 milisecs
+ User time: 131 milisecs
+ System time: 0 milisecs
+create_table
+ 
+ Real time: 5383 milisecs
+ User time: 2346 milisecs
+ System time: 3037 milisecs
+search_element
+ 
+ Real time: 59 milisecs
+ User time: 29 milisecs
+ System time: 29 milisecs
+add
+ 
+ Real time: 1 milisecs
+ User time: 1 milisecs
+ System time: 1 milisecs
+remove
+ 
+ Real time: 1836 milisecs
+ User time: 1836 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add
+ 
+
+
+
+./bin/shared 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+
+ Real time: 105 milisecs
+ User time: 104 milisecs
+ System time: 0 milisecs
+create_table
+ 
+ Real time: 4829 milisecs
+ User time: 4829 milisecs
+ System time: 0 milisecs
+search_element
+ 
+ Real time: 55 milisecs
+ User time: 55 milisecs
+ System time: 0 milisecs
+add
+ 
+ Real time: 0 milisecs
+ User time: 1 milisecs
+ System time: 0 milisecs
+remove
+ 
+ Real time: 156 milisecs
+ User time: 156 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add
+ 
+
+
+
+./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+
+ Real time: 44 milisecs
+ User time: 43 milisecs
+ System time: 0 milisecs
+create_table
+ 
+ Real time: 4162 milisecs
+ User time: 4162 milisecs
+ System time: 0 milisecs
+search_element
+ 
+ Real time: 27 milisecs
+ User time: 27 milisecs
+ System time: 0 milisecs
+add
+ 
+ Real time: 1 milisecs
+ User time: 1 milisecs
+ System time: 0 milisecs
+remove
+ 
+ Real time: 135 milisecs
+ User time: 136 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add
+ 
