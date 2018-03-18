@@ -1,6 +1,5 @@
-#include "./data.h"
-
-
+#include "data.h"
+//generatedata.com
 
 int data[1000][10] = {
 	 { 53, 98, 109, 110, 78, 122, 110, 73, 68, 90 },

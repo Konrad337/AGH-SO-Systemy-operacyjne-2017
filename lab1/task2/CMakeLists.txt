@@ -8,9 +8,11 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 #static
+
 set ( PROJECT_LINK_LIBS libcArrayStatic.a)
 link_directories( ./libs)
 add_executable(static ${SOURCES})
+target_compile_definitions(static PUBLIC -DSTATIC)
 target_link_libraries(static ${PROJECT_LINK_LIBS} )
 
 #shared

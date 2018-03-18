@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_FLAGS = -O3 -DNDEBUG  
 
-C_DEFINES = 
+C_DEFINES = -DSTATIC
 
 C_INCLUDES = 
 

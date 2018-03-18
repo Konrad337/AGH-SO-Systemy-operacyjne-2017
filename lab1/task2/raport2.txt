@@ -1,58 +1,119 @@
 Dodałem for-a, żeby search wykonywał się tysiąc razy dla lepszego porównania czasów pracy
 Czasy potrafią się bardzo różnić przy każdym uruchomieniu programu
+//Wydaje mi się, że na labach było wspomniane, żeby robić tablicę statyczną przy korzystaniu z biblioteki statycznie
+//a dynamiczną alokację przy bibliotekach dzielonych i dynamicznych a przynjamniej tak zrozumiałem, trzeci argument nic u mnie nie robi
+
+Zazwyczaj bez względu na rodzaj alokacji tablicy cały program dla małych ilości operacji wykonuje się całkowicie w kernelu, lub trybie użytkownika, dla dużej w obydwóch
 
 1. Alokacja statyczna i dynamiczna dla małych wartości argumentów
 
-./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
- Real time: 328 milisecs
- User time: 326 milisecs
- System time: 0 milisecs
+./bin/shared 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+ Real time: 408 milisecs
+ User time: 0 milisecs
+ System time: 406 milisecs
 create_table
 
- Real time: 35 milisecs
- User time: 35 milisecs
- System time: 0 milisecs
+ Real time: 7247 milisecs
+ User time: 6124 milisecs
+ System time: 1122 milisecs
 search_element
 
- Real time: 236 milisecs
- User time: 236 milisecs
- System time: 0 milisecs
+ Real time: 71 milisecs
+ User time: 40 milisecs
+ System time: 20 milisecs
 add
 
- Real time: 3 milisecs
- User time: 4 milisecs
+ Real time: 1 milisecs
+ User time: 1 milisecs
  System time: 0 milisecs
 remove
 
- Real time: 618 milisecs
- User time: 619 milisecs
- System time: 0 milisecs
+ Real time: 150 milisecs
+ User time: 101 milisecs
+ System time: 51 milisecs
 remove_blocks_and_add
 
+
+
 ./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
- Real time: 328 milisecs
- User time: 326 milisecs
- System time: 0 milisecs
+ Real time: 148 milisecs
+ User time: 0 milisecs
+ System time: 145 milisecs
 create_table
 
- Real time: 35 milisecs
- User time: 35 milisecs
- System time: 0 milisecs
+ Real time: 10135 milisecs
+ User time: 8776 milisecs
+ System time: 1346 milisecs
 search_element
 
- Real time: 236 milisecs
- User time: 236 milisecs
- System time: 0 milisecs
+ Real time: 42 milisecs
+ User time: 31 milisecs
+ System time: 10 milisecs
 add
 
- Real time: 3 milisecs
- User time: 4 milisecs
+ Real time: 2 milisecs
+ User time: 2 milisecs
  System time: 0 milisecs
 remove
 
- Real time: 618 milisecs
- User time: 619 milisecs
- System time: 0 milisecs
+ Real time: 168 milisecs
+ User time: 126 milisecs
+ System time: 42 milisecs
 remove_blocks_and_add
+
 
 2. To samo dla większej ilości operacji
+
+./bin/shared 1000 10 static create_table 1000000 10 search_element 1000 add 1000000 remove 1000000 remove_blocks_and_add 1000000
+ Real time: 15101 milisecs
+ User time: 15098 milisecs
+ System time: 0 milisecs
+create_table
+
+ Real time: 4881 milisecs
+ User time: 4885 milisecs
+ System time: 0 milisecs
+search_element
+
+ Real time: 8689 milisecs
+ User time: 5322 milisecs
+ System time: 3358 milisecs
+add
+
+ Real time: 2 milisecs
+ User time: 2 milisecs
+ System time: 0 milisecs
+remove
+
+ Real time: 15321 milisecs
+ User time: 15178 milisecs
+ System time: 144 milisecs
+remove_blocks_and_add
+
+
+
+./bin/static 1000 10 static create_table 1000000 10 search_element 1000 add 1000000 remove 1000000 remove_blocks_and_add 1000000
+ Real time: 11575 milisecs
+ User time: 11573 milisecs
+ System time: 0 milisecs
+create_table
+
+ Real time: 6194 milisecs
+ User time: 6194 milisecs
+ System time: 0 milisecs
+search_element
+
+ Real time: 3253 milisecs
+ User time: 3254 milisecs
+ System time: 0 milisecs
+add
+
+ Real time: 2 milisecs
+ User time: 2 milisecs
+ System time: 0 milisecs
+remove
+
+ Real time: 14694 milisecs
+ User time: 14693 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add

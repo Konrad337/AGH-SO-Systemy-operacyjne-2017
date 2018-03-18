@@ -125,17 +125,17 @@ struct parsedArgs parseArgs (int argc, char* argv[]) {
 
 
 
-void searchElement(struct array mainArray, int value) {
+void searchElement(struct array* mainArray, int value) {
     findClosestElementWithValue(mainArray, value);
 }
 
-void removeBlocks(struct array mainArray, int number) {
+void removeBlocks(struct array* mainArray, int number) {
     for (int i = 0; i < number; i++) {
         removeCharBlock(mainArray);
     }
 }
 
-void add(struct array mainArray, int number) {
+void add(struct array* mainArray, int number) {
     int j = 0;
     for (int i = 0; i < number; i++) {
         addCharBlock(mainArray ,data[j]);
@@ -146,14 +146,9 @@ void add(struct array mainArray, int number) {
 
 void createTable(int sizeA, int sizeB) {
     struct array mainArray = createArrayOfStringPtrs(sizeA, sizeB);
-    add(mainArray, sizeA);
-    deinitArray(mainArray);
+    add(&mainArray, sizeA);
+    deinitArray(&mainArray);
 }
-
-//Wydaje mi się, że na labach było wspomniane, żeby robić tablicę statyczną przy korzystaniu z biblioteki statycznie
-//a dynamiczną alokację przy bibliotekach dzielonych i dynamicznych a przynjamniej tak zrozumiałem, trzeci argument nic u mnie nie robi
-
-
 
 
 
@@ -164,7 +159,7 @@ int main( int argc, char* argv[] )
 
     struct parsedArgs args = parseArgs(argc, argv);
     struct array mainArray = createArrayOfStringPtrs(args.arraySize, args.blockSize);
-    add(mainArray, args.arraySize);
+    add(&mainArray, args.arraySize);
 
 
 
@@ -188,17 +183,17 @@ int main( int argc, char* argv[] )
             if (strcmp(args.operations[i][0], "search_element") == 0) {
                 int value = strtol(args.operations[i][1], NULL, 10);
                 for(int i = 0; i < 1000; i++)
-                    searchElement (mainArray, value);
+                    searchElement (&mainArray, value);
             }
             if (strcmp(args.operations[i][0], "remove_blocks") == 0)
-                removeBlocks(mainArray, strtol(args.operations[i][1], NULL, 10));
+                removeBlocks(&mainArray, strtol(args.operations[i][1], NULL, 10));
             if (strcmp(args.operations[i][0], "add") == 0)
-                add(mainArray, strtol(args.operations[i][1], NULL, 10));
+                add(&mainArray, strtol(args.operations[i][1], NULL, 10));
             if (strcmp(args.operations[i][0], "remove_blocks_and_add") == 0) {
                 int times = strtol(args.operations[i][1], NULL, 10);
                 for (int i = 0; i < times; i++) {
-                removeBlocks(mainArray, 1);
-                add(mainArray, 1);
+                removeBlocks(&mainArray, 1);
+                add(&mainArray, 1);
             }
             }
 
@@ -222,7 +217,7 @@ int main( int argc, char* argv[] )
 
     }
 
-    deinitArray(mainArray);
+    deinitArray(&mainArray);
     #ifdef DYNAMIC
     if (dlclose(handle) != 0) {
         printf("[%s] Problem closing library: %s", __FILE__, dlerror());
