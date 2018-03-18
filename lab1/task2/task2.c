@@ -4,6 +4,8 @@
 #include "../task1/carray.h"
 #include "data.h"
 #include <string.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 
 struct parsedArgs {
@@ -93,6 +95,7 @@ void createTable(int sizeA, int sizeB) {
 }
 
 
+
 int main( int argc, char* argv[] )
 {
     #ifdef DYNAMIC
@@ -108,6 +111,18 @@ int main( int argc, char* argv[] )
 
     for (int i = 0; i < args.opNumber; i++) {
 
+
+
+            struct timeval start, uStart, sStart;
+            struct timeval end, uEnd, sEnd;
+            struct rusage usage;
+
+
+            gettimeofday(&start, 0);
+            getrusage(RUSAGE_SELF, &usage);
+            uStart = usage.ru_utime;
+            sStart = usage.ru_stime;
+
             if (strcmp(args.operations[i][0], "create_table") == 0)
                 createTable(strtol(args.operations[i][1], NULL, 10), strtol(args.operations[i][2], NULL, 10));
             if (strcmp(args.operations[i][0], "search_element") == 0)
@@ -120,6 +135,24 @@ int main( int argc, char* argv[] )
                 removeBlocks(mainArray, strtol(args.operations[i][1], NULL, 10));
                 add(mainArray, strtol(args.operations[i][1], NULL, 10));
             }
+
+            gettimeofday(&end, 0);
+            getrusage(RUSAGE_SELF, &usage);
+            uEnd = usage.ru_utime;
+            sEnd = usage.ru_stime;
+
+            long real = (end.tv_sec-start.tv_sec)*1000000 + end.tv_usec-start.tv_usec;
+            long user = (uEnd.tv_sec-uStart.tv_sec)*1000000 + uEnd.tv_usec-uStart.tv_usec;
+            long systemT = (sEnd.tv_sec-sStart.tv_sec)*1000000 + sEnd.tv_usec-sStart.tv_usec;
+
+            printf(" Real time: %li milisecs\n"
+                   " User time: %li milisecs\n"
+                   " System time: %li milisecs\n"
+                   "%s\n \n",
+                   real,
+                   user,
+                   systemT,
+                   args.operations[i][0]);
 
     }
 
