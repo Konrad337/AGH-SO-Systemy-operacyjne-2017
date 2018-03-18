@@ -6,61 +6,15 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <dlfcn.h>
+
 
 
 #ifdef DYNAMIC
+#include <dlfcn.h>
 
-    lib = dlopen("./libs/libcArrayShared.so", RTLD_LAZY);
-    if (!lib) {
-            printf("[%s] Unable to load library: %s\n", __FILE__, dlerror());
-            exit(EXIT_FAILURE);
-        }
-        struct array (*createArrayOfStringPtrs)(int,int) =
-            dlsym(handle, "createArrayOfStringPtrs");
-        if (!(createArrayOfStringPtrs)){
-            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-            exit(EXIT_FAILURE);
-        }
-
-        void (*addCharBlock)(struct array, int*) =
-            dlsym(handle, "addCharBlock");
-            if (!(addCharBlock)){
-                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-                exit(EXIT_FAILURE);
-            }
-
-        void (*deinitArray)(struct array) =
-            dlsym(handle, "deinitArray");
-            if (!(deinitArray)){
-                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-                exit(EXIT_FAILURE);
-            }
-
-        int* (*findClosestElement)(struct array) =
-            dlsym(handle, "findClosestElement");
-            if (!(findClosestElement)){
-                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-                exit(EXIT_FAILURE);
-            }
-
-        void (*removeCharBlock)(struct array) =
-            dlsym(handle, "removeCharBlock");
-            if (!(removeCharBlock)){
-                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-                exit(EXIT_FAILURE);
-            }
-
-        int* (*findClosestElementWithValue)(struct array, int) =
-            dlsym(handle, "findClosestElementWithValue");
-            if (!(findClosestElementWithValue)){
-                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
-                exit(EXIT_FAILURE);
-            }
+        void* lib;
 
 #endif
-
-
 
 
 struct parsedArgs {
@@ -126,16 +80,52 @@ struct parsedArgs parseArgs (int argc, char* argv[]) {
 
 
 void searchElement(struct array* mainArray, int value) {
+
+    #ifdef DYNAMIC
+
+    int* (*findClosestElementWithValue)(struct array*, int) =
+        dlsym(lib, "findClosestElementWithValue");
+        if (!(findClosestElementWithValue)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+        #endif
+
     findClosestElementWithValue(mainArray, value);
 }
 
 void removeBlocks(struct array* mainArray, int number) {
+
+    #ifdef DYNAMIC
+
+    void (*removeCharBlock)(struct array*) =
+        dlsym(lib, "removeCharBlock");
+        if (!(removeCharBlock)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+        #endif
+
     for (int i = 0; i < number; i++) {
         removeCharBlock(mainArray);
     }
 }
 
 void add(struct array* mainArray, int number) {
+
+    #ifdef DYNAMIC
+
+    void (*addCharBlock)(struct array*, int*) =
+        dlsym(lib, "addCharBlock");
+        if (!(addCharBlock)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+    #endif
+
     int j = 0;
     for (int i = 0; i < number; i++) {
         addCharBlock(mainArray ,data[j]);
@@ -145,6 +135,25 @@ void add(struct array* mainArray, int number) {
 }
 
 void createTable(int sizeA, int sizeB) {
+
+    #ifdef DYNAMIC
+
+    struct array (*createArrayOfStringPtrs)(int,int) =
+        dlsym(lib, "createArrayOfStringPtrs");
+    if (!(createArrayOfStringPtrs)){
+        printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+        exit(EXIT_FAILURE);
+    }
+
+    void (*deinitArray)(struct array*) =
+        dlsym(lib, "deinitArray");
+        if (!(deinitArray)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+     #endif
+
     struct array mainArray = createArrayOfStringPtrs(sizeA, sizeB);
     add(&mainArray, sizeA);
     deinitArray(&mainArray);
@@ -155,7 +164,23 @@ void createTable(int sizeA, int sizeB) {
 int main( int argc, char* argv[] )
 {
 
+    #ifdef DYNAMIC
 
+        lib = dlopen("./libs/libcArrayShared.so", RTLD_LAZY);
+        if (!lib) {
+                printf("[%s] Unable to load library: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+
+        struct array (*createArrayOfStringPtrs)(int,int) =
+            dlsym(lib, "createArrayOfStringPtrs");
+        if (!(createArrayOfStringPtrs)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+    #endif
 
     struct parsedArgs args = parseArgs(argc, argv);
     struct array mainArray = createArrayOfStringPtrs(args.arraySize, args.blockSize);
@@ -217,9 +242,18 @@ int main( int argc, char* argv[] )
 
     }
 
+    #ifdef DYNAMIC
+    void (*deinitArray)(struct array*) =
+        dlsym(lib, "deinitArray");
+        if (!(deinitArray)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+    #endif
+
     deinitArray(&mainArray);
     #ifdef DYNAMIC
-    if (dlclose(handle) != 0) {
+    if (dlclose(lib) != 0) {
         printf("[%s] Problem closing library: %s", __FILE__, dlerror());
     }
     #endif

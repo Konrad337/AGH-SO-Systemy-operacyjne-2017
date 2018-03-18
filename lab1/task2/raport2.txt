@@ -3,7 +3,10 @@ Czasy potrafią się bardzo różnić przy każdym uruchomieniu programu
 //Wydaje mi się, że na labach było wspomniane, żeby robić tablicę statyczną przy korzystaniu z biblioteki statycznie
 //a dynamiczną alokację przy bibliotekach dzielonych i dynamicznych a przynjamniej tak zrozumiałem, trzeci argument nic u mnie nie robi
 
-Zazwyczaj bez względu na rodzaj alokacji tablicy cały program dla małych ilości operacji wykonuje się całkowicie w kernelu, lub trybie użytkownika, dla dużej w obydwóch
+Przy alokacji statycznej czas działania kernela dąży do zera, dzieje się tak, dlatego, że nie potrzebujemy w ogóle alokować,
+ani dealokować pamięci w systemie, kiedy program chce dodać elementy w tablicy poza zakres w trybie statycznym
+dane są po prostu nie przydzielane i tracone, przy alokacji dynamicznej tablica jest rozszerzana.
+odejmowanie i dodawanie na raz jest oczywiście szybsze niż po jednym elemencie głównie z powodów już opsisanych.
 
 1. Alokacja statyczna i dynamiczna dla małych wartości argumentów
 
@@ -36,30 +39,31 @@ remove_blocks_and_add
 
 
 ./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
- Real time: 148 milisecs
- User time: 0 milisecs
- System time: 145 milisecs
+ Real time: 169 milisecs
+ User time: 166 milisecs
+ System time: 0 milisecs
 create_table
 
- Real time: 10135 milisecs
- User time: 8776 milisecs
- System time: 1346 milisecs
+ Real time: 6826 milisecs
+ User time: 6826 milisecs
+ System time: 0 milisecs
 search_element
 
- Real time: 42 milisecs
+ Real time: 31 milisecs
  User time: 31 milisecs
- System time: 10 milisecs
+ System time: 0 milisecs
 add
 
- Real time: 2 milisecs
+ Real time: 1 milisecs
  User time: 2 milisecs
  System time: 0 milisecs
 remove
 
- Real time: 168 milisecs
- User time: 126 milisecs
- System time: 42 milisecs
+ Real time: 157 milisecs
+ User time: 157 milisecs
+ System time: 0 milisecs
 remove_blocks_and_add
+
 
 
 2. To samo dla większej ilości operacji
