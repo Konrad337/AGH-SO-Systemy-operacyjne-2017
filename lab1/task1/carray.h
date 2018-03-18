@@ -17,4 +17,6 @@ void deinitArray(struct array arr);
 
 int* findClosestElement(struct array arr);
 
+void removeCharBlock(struct array arr);
+
 #endif

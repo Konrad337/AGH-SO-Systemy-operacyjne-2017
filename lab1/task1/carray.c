@@ -24,14 +24,20 @@ void addCharBlock(struct array arr, int* block) {
       arr.sizeUsed += 1;
 }
 
+void removeCharBlock(struct array arr) {
 
+      arr.sizeUsed -= 1;
+
+}
 
 #endif
 
 #ifndef STATIC
 
+
 struct array createArrayOfStringPtrs(int tabSize, int wordSize) {
 
+    if(tabSize < 1) tabSize = 1;
     struct array newArr;
     newArr.tabSize = tabSize;
     newArr.wordSize = wordSize;
@@ -61,7 +67,17 @@ void addCharBlock(struct array arr, int* block) {
 void deinitArray(struct array arr) {
      free(arr.arr);
 }
+
+void removeCharBlock(struct array arr) {
+
+      free(arr.arr[arr.sizeUsed]);
+      arr.sizeUsed -= 1;
+
+}
+
 #endif
+
+
 
 int* findClosestElement(struct array arr) {
 

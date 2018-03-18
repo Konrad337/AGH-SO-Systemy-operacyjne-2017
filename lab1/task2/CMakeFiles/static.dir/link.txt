@@ -1,1 +1,1 @@
-/usr/bin/cc    CMakeFiles/static.dir/data.c.o CMakeFiles/static.dir/task2.c.o  -o bin/static  -L/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-Bstatic -lcArrayStatic -Wl,-Bdynamic 
+/usr/bin/cc -g   CMakeFiles/static.dir/data.c.o CMakeFiles/static.dir/task2.c.o  -o bin/static  -L/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-Bstatic -lcArrayStatic -Wl,-Bdynamic 

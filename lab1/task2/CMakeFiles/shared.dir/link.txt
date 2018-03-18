@@ -1,1 +1,1 @@
-/usr/bin/cc    CMakeFiles/shared.dir/data.c.o CMakeFiles/shared.dir/task2.c.o  -o bin/shared  -L/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task2/./libs -lcArrayShared 
+/usr/bin/cc -g   CMakeFiles/shared.dir/data.c.o CMakeFiles/shared.dir/task2.c.o  -o bin/shared  -L/home/konrad/Desktop/SO/lab1/task2/./libs -Wl,-rpath,/home/konrad/Desktop/SO/lab1/task2/./libs -lcArrayShared 
