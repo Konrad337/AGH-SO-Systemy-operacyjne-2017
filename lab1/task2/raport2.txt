@@ -1,0 +1,58 @@
+Dodałem for-a, żeby search wykonywał się tysiąc razy dla lepszego porównania czasów pracy
+Czasy potrafią się bardzo różnić przy każdym uruchomieniu programu
+
+1. Alokacja statyczna i dynamiczna dla małych wartości argumentów
+
+./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+ Real time: 328 milisecs
+ User time: 326 milisecs
+ System time: 0 milisecs
+create_table
+
+ Real time: 35 milisecs
+ User time: 35 milisecs
+ System time: 0 milisecs
+search_element
+
+ Real time: 236 milisecs
+ User time: 236 milisecs
+ System time: 0 milisecs
+add
+
+ Real time: 3 milisecs
+ User time: 4 milisecs
+ System time: 0 milisecs
+remove
+
+ Real time: 618 milisecs
+ User time: 619 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add
+
+./bin/static 1000 10 static create_table 10000 10 search_element 1000 add 10000 remove 10000 remove_blocks_and_add 10000
+ Real time: 328 milisecs
+ User time: 326 milisecs
+ System time: 0 milisecs
+create_table
+
+ Real time: 35 milisecs
+ User time: 35 milisecs
+ System time: 0 milisecs
+search_element
+
+ Real time: 236 milisecs
+ User time: 236 milisecs
+ System time: 0 milisecs
+add
+
+ Real time: 3 milisecs
+ User time: 4 milisecs
+ System time: 0 milisecs
+remove
+
+ Real time: 618 milisecs
+ User time: 619 milisecs
+ System time: 0 milisecs
+remove_blocks_and_add
+
+2. To samo dla większej ilości operacji

@@ -6,6 +6,61 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <dlfcn.h>
+
+
+#ifdef DYNAMIC
+
+    lib = dlopen("./libs/libcArrayShared.so", RTLD_LAZY);
+    if (!lib) {
+            printf("[%s] Unable to load library: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+        struct array (*createArrayOfStringPtrs)(int,int) =
+            dlsym(handle, "createArrayOfStringPtrs");
+        if (!(createArrayOfStringPtrs)){
+            printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+            exit(EXIT_FAILURE);
+        }
+
+        void (*addCharBlock)(struct array, int*) =
+            dlsym(handle, "addCharBlock");
+            if (!(addCharBlock)){
+                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+        void (*deinitArray)(struct array) =
+            dlsym(handle, "deinitArray");
+            if (!(deinitArray)){
+                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+        int* (*findClosestElement)(struct array) =
+            dlsym(handle, "findClosestElement");
+            if (!(findClosestElement)){
+                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+        void (*removeCharBlock)(struct array) =
+            dlsym(handle, "removeCharBlock");
+            if (!(removeCharBlock)){
+                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+        int* (*findClosestElementWithValue)(struct array, int) =
+            dlsym(handle, "findClosestElementWithValue");
+            if (!(findClosestElementWithValue)){
+                printf("[%s] Unable to get symbol: %s\n", __FILE__, dlerror());
+                exit(EXIT_FAILURE);
+            }
+
+#endif
+
+
 
 
 struct parsedArgs {
@@ -71,7 +126,7 @@ struct parsedArgs parseArgs (int argc, char* argv[]) {
 
 
 void searchElement(struct array mainArray, int value) {
-
+    findClosestElementWithValue(mainArray, value);
 }
 
 void removeBlocks(struct array mainArray, int number) {
@@ -92,22 +147,27 @@ void add(struct array mainArray, int number) {
 void createTable(int sizeA, int sizeB) {
     struct array mainArray = createArrayOfStringPtrs(sizeA, sizeB);
     add(mainArray, sizeA);
+    deinitArray(mainArray);
 }
+
+//Wydaje mi się, że na labach było wspomniane, żeby robić tablicę statyczną przy korzystaniu z biblioteki statycznie
+//a dynamiczną alokację przy bibliotekach dzielonych i dynamicznych a przynjamniej tak zrozumiałem, trzeci argument nic u mnie nie robi
+
+
 
 
 
 int main( int argc, char* argv[] )
 {
-    #ifdef DYNAMIC
-        lib = dlopen("./libs/libcArrayShared.so", RTLD_LAZY);
-        //void (*print)(Block*) = dlsym(lib, "print")
-        //void (*delete_all)(Block*) = dlsym(lib, "delete_all");
-    #endif
 
 
 
     struct parsedArgs args = parseArgs(argc, argv);
     struct array mainArray = createArrayOfStringPtrs(args.arraySize, args.blockSize);
+    add(mainArray, args.arraySize);
+
+
+
 
     for (int i = 0; i < args.opNumber; i++) {
 
@@ -125,15 +185,21 @@ int main( int argc, char* argv[] )
 
             if (strcmp(args.operations[i][0], "create_table") == 0)
                 createTable(strtol(args.operations[i][1], NULL, 10), strtol(args.operations[i][2], NULL, 10));
-            if (strcmp(args.operations[i][0], "search_element") == 0)
-                searchElement (mainArray, strtol(args.operations[i][1], NULL, 10));
-            if (strcmp(args.operations[i][0], "removeBlocks") == 0)
+            if (strcmp(args.operations[i][0], "search_element") == 0) {
+                int value = strtol(args.operations[i][1], NULL, 10);
+                for(int i = 0; i < 1000; i++)
+                    searchElement (mainArray, value);
+            }
+            if (strcmp(args.operations[i][0], "remove_blocks") == 0)
                 removeBlocks(mainArray, strtol(args.operations[i][1], NULL, 10));
             if (strcmp(args.operations[i][0], "add") == 0)
                 add(mainArray, strtol(args.operations[i][1], NULL, 10));
-            if (strcmp(args.operations[i][0], "removeBlocks_and_add") == 0) {
-                removeBlocks(mainArray, strtol(args.operations[i][1], NULL, 10));
-                add(mainArray, strtol(args.operations[i][1], NULL, 10));
+            if (strcmp(args.operations[i][0], "remove_blocks_and_add") == 0) {
+                int times = strtol(args.operations[i][1], NULL, 10);
+                for (int i = 0; i < times; i++) {
+                removeBlocks(mainArray, 1);
+                add(mainArray, 1);
+            }
             }
 
             gettimeofday(&end, 0);
@@ -156,7 +222,12 @@ int main( int argc, char* argv[] )
 
     }
 
-
+    deinitArray(mainArray);
+    #ifdef DYNAMIC
+    if (dlclose(handle) != 0) {
+        printf("[%s] Problem closing library: %s", __FILE__, dlerror());
+    }
+    #endif
 
 
 

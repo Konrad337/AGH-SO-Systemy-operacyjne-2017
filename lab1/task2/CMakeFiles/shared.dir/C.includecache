@@ -27,4 +27,10 @@ data.h
 /home/konrad/Desktop/SO/lab1/task2/data.h
 string.h
 -
+sys/time.h
+-
+sys/resource.h
+-
+dlfcn.h
+-
 

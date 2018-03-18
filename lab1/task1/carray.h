@@ -19,4 +19,6 @@ int* findClosestElement(struct array arr);
 
 void removeCharBlock(struct array arr);
 
+int* findClosestElementWithValue(struct array arr, int value);
+
 #endif

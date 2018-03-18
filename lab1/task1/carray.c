@@ -25,10 +25,18 @@ void addCharBlock(struct array arr, int* block) {
 }
 
 void removeCharBlock(struct array arr) {
-
+      if(arr.sizeUsed <= 0)
+          return;
       arr.sizeUsed -= 1;
 
 }
+
+struct array createArrayOfStringPtrs(int tabSize, int wordSize) {
+
+    printf("STATIC!\n\n");
+    return arr;
+}
+
 
 #endif
 
@@ -36,6 +44,8 @@ void removeCharBlock(struct array arr) {
 
 
 struct array createArrayOfStringPtrs(int tabSize, int wordSize) {
+
+
 
     if(tabSize < 1) tabSize = 1;
     struct array newArr;
@@ -70,6 +80,8 @@ void deinitArray(struct array arr) {
 
 void removeCharBlock(struct array arr) {
 
+    if(arr.sizeUsed <= 0)
+        return;
       free(arr.arr[arr.sizeUsed]);
       arr.sizeUsed -= 1;
 
@@ -95,4 +107,21 @@ int index = 0;
       }
   }
 return arr.arr[index];
+}
+
+int* findClosestElementWithValue(struct array arr, int value) {
+    int sum = 0;
+    int bestDiff = INT_MAX;
+    int index = 0;
+
+      for (int i = 0; i < arr.sizeUsed; i++) {
+        for (int j = 0; j < arr.wordSize; j++) {
+              sum += arr.arr[i][j];
+      }
+          if(sum - value < bestDiff) {
+              bestDiff = sum - value;
+              index = i;
+          }
+      }
+    return arr.arr[index];
 }

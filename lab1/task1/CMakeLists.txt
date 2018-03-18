@@ -14,8 +14,8 @@ add_library(cArrayShared SHARED ${SOURCES})
 #static
 add_definitions(-DSTATIC)
 add_library(cArrayStatic STATIC ${SOURCES})
+install(TARGETS cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
 remove_definitions(-DSTATIC)
 
 
-install(TARGETS cArrayShared cArrayStatic DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
-install(TARGETS cArrayShared DESTINATION /usr/lib)
+install(TARGETS cArrayShared DESTINATION /home/konrad/Desktop/SO/lab1/task2/libs)
