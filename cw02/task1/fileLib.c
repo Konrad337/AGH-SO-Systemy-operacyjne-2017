@@ -50,7 +50,7 @@ void generateFile(char *filePath, int recordsNumber, int recordSize) {
 
 
     HANDLE handle = OPENW(filePath);
-    HANDLE randHandle = OPENR("/dev/random");
+    HANDLE randHandle = OPENR("/dev/urandom");
 
 
     char* buffer = (char*) malloc(recordSize * sizeof(char));
@@ -65,12 +65,13 @@ void generateFile(char *filePath, int recordsNumber, int recordSize) {
             exit(EXIT_FAILURE);
             }
 
-
-            for (int j = 0; j < recordSize; j++) {
-                buffer[j] = buffer[j] % 52;
-                if (buffer[j] < 26) buffer[j] = buffer[j] + 65;
-                else buffer[j] = buffer[j] + 71;
+            for (int j = 0; j < recordSize - 1; j++) {
+                if(buffer[j] < 0) buffer[j] = -buffer[j];
+                buffer[j] = 48 + buffer[j] % 74;
             }
+
+            buffer[recordSize - 1] = 10; //newline for readability
+
             if (NOT_WRITTEN(handle, buffer, recordSize)) {
                 printf("Writing to %s failed, shutting down.", filePath);
                 CLOSE(handle);
