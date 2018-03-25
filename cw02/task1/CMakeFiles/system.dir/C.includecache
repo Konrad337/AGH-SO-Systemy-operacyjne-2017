@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/konrad/Desktop/SO/cw02/task1/fileLib.c
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+fileLib.h
+/home/konrad/Desktop/SO/cw02/task1/fileLib.h
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+unistd.h
+-
+
+/home/konrad/Desktop/SO/cw02/task1/fileLib.h
+
+/home/konrad/Desktop/SO/cw02/task1/task.c
+stdlib.h
+-
+stdio.h
+-
+fileLib.h
+/home/konrad/Desktop/SO/cw02/task1/fileLib.h
+string.h
+-
+sys/time.h
+-
+sys/resource.h
+-
+

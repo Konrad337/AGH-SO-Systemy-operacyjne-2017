@@ -1,0 +1,33 @@
+Start testing: Mar 25 16:03 CEST
+----------------------------------------------------------
+1/2 Testing: testSystem
+1/2 Test: testSystem
+Command: "/usr/bin/sh" "-c" "rm -f /home/konrad/Desktop/SO/cw02/task1/tests/systemResults.txt           && /home/konrad/Desktop/SO/cw02/task1/bin/system 10 12                       generate /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileSystem                       copy /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileSystem /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileSystem2                       sort /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileSystem2           >> /home/konrad/Desktop/SO/cw02/task1/tests/systemResults.txt"
+Directory: /home/konrad/Desktop/SO/cw02/task1
+"testSystem" start time: Mar 25 16:03 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"testSystem" end time: Mar 25 16:03 CEST
+"testSystem" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: testLib
+2/2 Test: testLib
+Command: "/usr/bin/sh" "-c" "rm -f /home/konrad/Desktop/SO/cw02/task1/tests/libResults.txt           && /home/konrad/Desktop/SO/cw02/task1/bin/lib 10 12                       generate /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib                       copy /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib2                       sort /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib2           >> /home/konrad/Desktop/SO/cw02/task1/tests/libResults.txt"
+Directory: /home/konrad/Desktop/SO/cw02/task1
+"testLib" start time: Mar 25 16:03 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  30.77 sec
+----------------------------------------------------------
+Test Passed.
+"testLib" end time: Mar 25 16:04 CEST
+"testLib" time elapsed: 00:00:30
+----------------------------------------------------------
+
+End testing: Mar 25 16:04 CEST
