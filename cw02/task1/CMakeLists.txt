@@ -18,12 +18,12 @@ add_executable(lib ${SOURCES})
 
 file(MAKE_DIRECTORY ${CMAKE_TEST_DIR})
 
-set(runSystemCommand "${CMAKE_BINARY_DIR}/system 10 12 \
+set(runSystemCommand "${CMAKE_BINARY_DIR}/system 1000 30 \
                       generate ${CMAKE_TEST_DIR}/testRandomFileSystem \
                       copy ${CMAKE_TEST_DIR}/testRandomFileSystem ${CMAKE_TEST_DIR}/testRandomFileSystem2 \
                       sort ${CMAKE_TEST_DIR}/testRandomFileSystem2")
 
-set(runLibCommand "${CMAKE_BINARY_DIR}/lib 10 12 \
+set(runLibCommand "${CMAKE_BINARY_DIR}/lib 1000 30 \
                       generate ${CMAKE_TEST_DIR}/testRandomFileLib \
                       copy ${CMAKE_TEST_DIR}/testRandomFileLib ${CMAKE_TEST_DIR}/testRandomFileLib2 \
                       sort ${CMAKE_TEST_DIR}/testRandomFileLib2")

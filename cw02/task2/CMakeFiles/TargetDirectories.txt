@@ -1,0 +1,4 @@
+/home/konrad/Desktop/SO/cw02/task2/CMakeFiles/rebuild_cache.dir
+/home/konrad/Desktop/SO/cw02/task2/CMakeFiles/edit_cache.dir
+/home/konrad/Desktop/SO/cw02/task2/CMakeFiles/task.dir
+/home/konrad/Desktop/SO/cw02/task2/CMakeFiles/nftw.dir

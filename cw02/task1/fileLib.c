@@ -93,13 +93,16 @@ void copyFile(char *sourceFileName, char *destFileName, int recordsNumber, int b
 
     if(sourceFile && destFile) {
         for(int i=0; i < recordsNumber; i++) {
+
             if(NOT_READ(sourceFile,buffer,bufferSize)) {
+
                 printf("Reading from %s failed, shutting down.",sourceFileName);
                 CLOSE(sourceFile);
                 CLOSE(destFile);
                 exit(EXIT_FAILURE);
             }
             if(NOT_WRITTEN(destFile,buffer,bufferSize)) {
+
                 printf("Writing to %s failed, shutting down.",destFileName);
                 CLOSE(sourceFile);
                 CLOSE(destFile);
@@ -120,10 +123,12 @@ void sortFile(char *filePath, int recordsNumber, int recordSize) {
     if(handle) {
 
         for(int i=1; i < recordsNumber; i++) {
+
             SEEK_BEGINNING(handle,i*recordSize);
             READ(handle,bufferOne,recordSize);
             int j=0;
             while(1) {
+
                 SEEK_BEGINNING(handle,j*recordSize);
                 READ(handle,bufferTwo,recordSize);
                 if(j>=i || bufferOne[0]<bufferTwo[0]) {
@@ -135,6 +140,7 @@ void sortFile(char *filePath, int recordsNumber, int recordSize) {
             SEEK_CURRENT(handle,-recordSize);
             WRITE(handle,bufferOne,recordSize);
             for(int k = j+1; k < i+1; k++) {
+
                 SEEK_BEGINNING(handle,k*recordSize);
                 READ(handle,bufferOne,recordSize);
                 SEEK_CURRENT(handle,-recordSize);

@@ -1,18 +1,18 @@
 Generating file with random content to /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib
- Real time: 241 milisecs
- User time: 0 milisecs
- System time: 184 milisecs
+ Real time: 945 milisecs
+ User time: 944 milisecs
+ System time: 0 milisecs
 generate
  
 Coping /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib to /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib2
- Real time: 72 milisecs
+ Real time: 203 milisecs
  User time: 0 milisecs
- System time: 72 milisecs
+ System time: 204 milisecs
 copy
  
 Sorting file /home/konrad/Desktop/SO/cw02/task1/tests/testRandomFileLib2
- Real time: 184 milisecs
- User time: 0 milisecs
- System time: 184 milisecs
+ Real time: 1073242 milisecs
+ User time: 274819 milisecs
+ System time: 795338 milisecs
 sort
  
