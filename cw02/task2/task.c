@@ -12,7 +12,7 @@
 #include <dirent.h>
 #include <time.h>
 
-
+#define NOOPENFD 1024
 const char dateFormat[] = "%Y-%m-%d %H:%M:%S";
 
 struct parsedArgs {
@@ -20,6 +20,9 @@ struct parsedArgs {
     char direction;
     char* date;
 };
+
+struct parsedArgs stupidGlobalVariableButStackSaysYouCannotDoItOtherWay;
+#define SGVBSSYCDIOW stupidGlobalVariableButStackSaysYouCannotDoItOtherWay
 
 struct parsedArgs parseArgs (int argc, char* argv[]) {
     if(argc < 3)
@@ -36,7 +39,7 @@ struct parsedArgs parseArgs (int argc, char* argv[]) {
     return args;
 }
 
-char* getPermissions(struct stat* stat_buffer) {
+char* getPermissions(const struct stat* stat_buffer) {
 
     char* permissions = (char*) malloc(sizeof(char) * 11);
     permissions[0] = S_ISDIR(stat_buffer -> st_mode) ? 'd' : '-';
@@ -63,7 +66,8 @@ int compareDate (char* date, char direction, time_t fileTime) {
     time_t parsedTime = mktime(parsedDate);
 
     if(direction == '='){
-        return fabs(difftime(parsedTime, fileTime))> 0.001 ? 1 : 0;
+        if (fabs(difftime(parsedTime, fileTime)) > 0) printf(" %c", 8); //Bez tego nie działa i nie wiem dlaczego
+        return fabs(difftime(parsedTime, fileTime)) < 0.1 ? 1 : 0;
     } else if(direction == '>'){
         return difftime(parsedTime, fileTime) > 0 ? 1 : 0;
     } else if(direction == '<'){
@@ -72,7 +76,7 @@ int compareDate (char* date, char direction, time_t fileTime) {
         exit(EXIT_FAILURE);
 }
 
-void printFileInfo(struct stat* statBuffer, char* absPath) {
+void printFileInfo(const struct stat* statBuffer,const char* absPath) {
 
     char* permissions =  (char*) getPermissions(statBuffer);
 
@@ -85,12 +89,6 @@ void printFileInfo(struct stat* statBuffer, char* absPath) {
     free(permissions);
 }
 
-void processRegularFile(char* path, struct stat *fileStat) {
-
-    printFileInfo(fileStat ,path);
-
-
-}
 
 void processFileStructure( char* path,
                            char direction,
@@ -119,7 +117,7 @@ void processFileStructure( char* path,
 
                     if(stat(currentDirPath, statBuffer) != -1)
                     if(compareDate(date, direction, statBuffer -> st_mtime)) {
-                       processRegularFile(currentDirPath, statBuffer);
+                       printFileInfo(statBuffer, currentDirPath);
 
                    }
                }
@@ -130,6 +128,15 @@ void processFileStructure( char* path,
        }
  }
 
+ int fn (const char *fpath, const struct stat *sb,
+            int typeflag, struct FTW *ftwbuf) {
+
+                if (typeflag == FTW_F && compareDate(SGVBSSYCDIOW.date, SGVBSSYCDIOW.direction, sb -> st_mtime))
+                       printFileInfo(sb, fpath);
+
+
+                    return 0;
+            }
 
 
 int main( int argc, char* argv[] ) {
@@ -142,7 +149,8 @@ int main( int argc, char* argv[] ) {
         return EXIT_FAILURE;
     }
     #ifdef NFTW
-        printf("NOT IMPLEMENTED YET\n");
+        SGVBSSYCDIOW = parseArgs(argc, argv);
+        nftw(SGVBSSYCDIOW.path, fn, NOOPENFD, FTW_PHYS);
     #else
         processFileStructure(args.path, args.direction, args.date);
     #endif

@@ -17,3 +17,4 @@ target_compile_definitions(nftw PUBLIC -DNFTW)
 
 
 set_property(TARGET task PROPERTY C_STANDARD 99)
+set_property(TARGET nftw PROPERTY C_STANDARD 99)

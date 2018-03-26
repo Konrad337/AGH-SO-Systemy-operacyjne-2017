@@ -1,5 +1,0 @@
-/home/konrad/Desktop/SO/lab1/task3/a/CMakeFiles/edit_cache.dir
-/home/konrad/Desktop/SO/lab1/task3/a/CMakeFiles/dynamic.dir
-/home/konrad/Desktop/SO/lab1/task3/a/CMakeFiles/static.dir
-/home/konrad/Desktop/SO/lab1/task3/a/CMakeFiles/rebuild_cache.dir
-/home/konrad/Desktop/SO/lab1/task3/a/CMakeFiles/shared.dir
