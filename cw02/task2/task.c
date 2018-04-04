@@ -66,7 +66,8 @@ int compareDate (char* date, char direction, time_t fileTime) {
     time_t parsedTime = mktime(parsedDate);
 
     if(direction == '='){
-        if (fabs(difftime(parsedTime, fileTime)) > 0) printf(" %c", 8); //Bez tego nie działa i nie wiem dlaczego
+        //printf("%d %d\n", parsedTime, fileTime);
+        //if (fabs(difftime(parsedTime, fileTime)) > 0) printf(" %c", 8); //Bez tego nie działa i nie wiem dlaczego
         return fabs(difftime(parsedTime, fileTime)) < 0.1 ? 1 : 0;
     } else if(direction == '>'){
         return difftime(parsedTime, fileTime) > 0 ? 1 : 0;
