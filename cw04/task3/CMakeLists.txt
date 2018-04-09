@@ -10,6 +10,9 @@ set(CMAKE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 
 #normal
 add_executable(task ${SOURCES})
+add_executable(info ${SOURCES})
+target_compile_definitions(info PUBLIC -DADDITIONAL_INFO)
 
 
 set_property(TARGET task PROPERTY C_STANDARD 99)
+set_property(TARGET info PROPERTY C_STANDARD 99)
