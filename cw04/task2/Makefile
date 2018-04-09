@@ -123,6 +123,19 @@ task/fast:
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/build
 .PHONY : task/fast
 
+#=============================================================================
+# Target rules for targets named info
+
+# Build rule for target.
+info: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 info
+.PHONY : info
+
+# fast build rule for target.
+info/fast:
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/build
+.PHONY : info/fast
+
 task.o: task.c.o
 
 .PHONY : task.o
@@ -130,6 +143,7 @@ task.o: task.c.o
 # target to build an object file
 task.c.o:
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/task.c.o
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/task.c.o
 .PHONY : task.c.o
 
 task.i: task.c.i
@@ -139,6 +153,7 @@ task.i: task.c.i
 # target to preprocess a source file
 task.c.i:
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/task.c.i
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/task.c.i
 .PHONY : task.c.i
 
 task.s: task.c.s
@@ -148,6 +163,7 @@ task.s: task.c.s
 # target to generate assembly for a file
 task.c.s:
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/task.c.s
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/task.c.s
 .PHONY : task.c.s
 
 # Help Target
@@ -157,8 +173,9 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... task"
 	@echo "... edit_cache"
+	@echo "... task"
+	@echo "... info"
 	@echo "... task.o"
 	@echo "... task.i"
 	@echo "... task.s"

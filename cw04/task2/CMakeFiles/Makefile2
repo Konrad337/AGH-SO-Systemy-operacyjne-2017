@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/konrad/Desktop/SO/cw04/task2
 CMakeFiles/task.dir/all:
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/depend
 	$(MAKE) -f CMakeFiles/task.dir/build.make CMakeFiles/task.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/cw04/task2/CMakeFiles --progress-num=1,2 "Built target task"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/cw04/task2/CMakeFiles --progress-num=3,4 "Built target task"
 .PHONY : CMakeFiles/task.dir/all
 
 # Include target in all.
@@ -93,6 +93,43 @@ CMakeFiles/task.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/task.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/info.dir
+
+# All Build rule for target.
+CMakeFiles/info.dir/all:
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/depend
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/konrad/Desktop/SO/cw04/task2/CMakeFiles --progress-num=1,2 "Built target info"
+.PHONY : CMakeFiles/info.dir/all
+
+# Include target in all.
+all: CMakeFiles/info.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/info.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/cw04/task2/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/info.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/konrad/Desktop/SO/cw04/task2/CMakeFiles 0
+.PHONY : CMakeFiles/info.dir/rule
+
+# Convenience name for target.
+info: CMakeFiles/info.dir/rule
+
+.PHONY : info
+
+# clean rule for target.
+CMakeFiles/info.dir/clean:
+	$(MAKE) -f CMakeFiles/info.dir/build.make CMakeFiles/info.dir/clean
+.PHONY : CMakeFiles/info.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/info.dir/clean
 
 .PHONY : clean
 

@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 
 
+#define ADDITIONAL_INFO
 
 struct parsedArgs {
     int childrenNum;
@@ -57,13 +58,12 @@ int childFun() {
     int sleepTime = rand() % 10;
     sleep(sleepTime);
 
-
+    kill(getppid(), SIGUSR1);
 
     sigset_t mask;
     sigfillset(&mask);
     sigdelset(&mask,SIGUSR2);
     sigdelset(&mask,SIGINT);
-    kill(getppid(), SIGUSR1);
     sigsuspend(&mask);
 
     kill(getppid(), rand() % (SIGRTMAX - SIGRTMIN) + SIGRTMIN);
@@ -77,22 +77,20 @@ void dealWithRequest(int sig) {
     #endif
 }
 
-void dealWithFurtherRequest(int signal, siginfo_t* info, void* ucontext) {
+void dealWithFurtherRequest(int sig) {
 
 
-    if(fork() == 0) {
-        kill(info -> si_pid, SIGUSR2);
-        #ifdef ADDITIONAL_INFO
-            printf("Got request number %i\n", reqNum);
-            printf("Pass send to child %i\n", info -> si_pid);
-        #endif
-        exit(EXIT_SUCCESS);
-    } //else wait(NULL);
     reqNum++;
+    kill(0, SIGUSR2);
+    #ifdef ADDITIONAL_INFO
+        printf("Got request number %i\n", reqNum);
+        //printf("Pass send to child\n");
+    #endif
 
 }
 
 void getPinged(int signal, siginfo_t* info, void* ucontext) {
+
 
      #ifdef ADDITIONAL_INFO
      printf("Got pinged from process %i with signal %i\n", info -> si_pid, signal);
@@ -151,26 +149,24 @@ int main( int argc, char* argv[] ) {
         #endif
 
         struct sigaction dealWithFurtherRequests;
-        dealWithFurtherRequests.sa_sigaction = dealWithFurtherRequest;
-        dealWithFurtherRequests.sa_flags = SA_SIGINFO | SA_NODEFER;
-        sigemptyset (&dealWithFurtherRequests.sa_mask);
+        dealWithFurtherRequests.sa_handler = dealWithFurtherRequest;
+        dealWithFurtherRequests.sa_flags = 0;
+        kill(0, SIGUSR2);
         sigaction(SIGUSR1, &dealWithFurtherRequests, NULL);
-        kill(0, SIGUSR2);
+
 
 
 }
-
-
-    if(pid == 0) {
-        printf("Child with pid %i ended work with sleep time %i\n", getpid(), sleepTime);
-    } else {
-
     errno = 0;
-    while (errno != ECHILD) {
-        sleep(1);
-        wait(NULL);
-        kill(0, SIGUSR2);
-    }
-}
+    while (errno != ECHILD)
+       wait(NULL);
+
+    if(pid == 0)
+        printf("Child with pid %i ended work with sleep time %i\n", getpid(), sleepTime);
+
+
+
+
+
 
 }
