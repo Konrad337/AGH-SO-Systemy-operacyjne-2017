@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/konrad/Desktop/SO/cw04/task1/task.c
+stdio.h
+-
+signal.h
+-
+unistd.h
+-
+time.h
+-
+sys/time.h
+-
+stdlib.h
+-
+
