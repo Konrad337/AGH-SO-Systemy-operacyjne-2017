@@ -11,10 +11,5 @@ set(CMAKE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 #normal
 add_executable(task ${SOURCES})
 
-#task nftw
-add_executable(nftw ${SOURCES})
-target_compile_definitions(nftw PUBLIC -DNFTW)
-
 
 set_property(TARGET task PROPERTY C_STANDARD 99)
-set_property(TARGET nftw PROPERTY C_STANDARD 99)

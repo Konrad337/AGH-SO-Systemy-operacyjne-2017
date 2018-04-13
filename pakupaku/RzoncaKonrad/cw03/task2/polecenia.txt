@@ -1,4 +1,0 @@
-ls -l
-ps
-echo "ECHO"
-./bin/task ./polecenia.txt
