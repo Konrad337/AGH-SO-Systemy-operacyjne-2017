@@ -33,4 +33,8 @@ string.h
 /home/konrad/Desktop/SO/cw06/task1/src/server.c
 client_server.h
 /home/konrad/Desktop/SO/cw06/task1/src/client_server.h
+math.h
+-
+limits.h
+-
 
