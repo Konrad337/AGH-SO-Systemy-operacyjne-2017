@@ -48,12 +48,15 @@ struct parsed_args parse_args (int argc, char* argv[]) {
     return args;
 }
 
-int msg_q_id = -1;
+mqd_t msg_q_id = -1;
+char* gq_name = NULL;
 
 void clean() {
-    printf("Cleaning and exiting \n");
     if(msg_q_id != -1)
-        if(msgctl(msg_q_id, IPC_RMID, NULL))
+        if(mq_close(msg_q_id))
+            printf("Cleaning failed\n");
+    if(gq_name != NULL)
+        if(mq_unlink(gq_name))
             printf("Cleaning failed\n");
 }
 
@@ -66,8 +69,9 @@ void finish(int signal) {
 
 }
 
-void read_msg_from_server(int q_id, void* buffer, int size, long type, int flags) {
-    while(msgrcv(q_id, buffer, size, type, flags | IPC_NOWAIT) == -1) {
+void read_msg_from_server(int q_id, char* buffer, int size) {
+    printf(KWHT "Waiting for server response...\n" RESET);
+    while(mq_receive(q_id, buffer, size, NULL) == -1) {
         if (errno != ENOMSG) {
             printf("Failed to communicate with server with errno: %s\n", strerror(errno));
             clean();
@@ -89,65 +93,68 @@ int main( int argc, char* argv[] ) {
 
     struct parsed_args args = parse_args(argc, argv);
 
-    struct passwd *pw = getpwuid(getuid());
-    char* homedir = pw->pw_dir;
-
-    key_t key = ftok(homedir, DESIRED_KEY_NUMBER);
-    if(key == -1) {
-        printf("Could not create key %#010x\n", key);
-        exit(EXIT_FAILURE);
-    }
-
-    int q_id = msgget(key, 0);
+    GET_SERVER_Q_NAME;
+    mqd_t q_id = mq_open(server_q_name, O_WRONLY );
     if(q_id == -1) {
-            printf("Failed with key %#010x, exiting\n", key);
+            printf("Failed with name %s, exiting\n", server_q_name);
+            clean();
             exit(EXIT_FAILURE);
     }
     printf("Connected to q with id %i\n", q_id);
 
-    int private_q_id = msgget(key + getpid(), IPC_CREAT | IPC_EXCL | 0660);
+    srand(time(NULL));
+    char * q_name = (char*) malloc(Q_NAME_MAX_SIZE*sizeof(char));
+    sprintf(q_name,"/q%c%id", rand() % ('z' - 'a') + 'a', getpid() | rand());
+
+    struct mq_attr attr;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = MAX_MSG_SIZE;
+    attr.mq_flags   = 0;
+    attr.mq_curmsgs   = 0;
+    mqd_t private_q_id = mq_open(q_name, O_RDONLY | O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH, &attr);
+
     if(private_q_id == -1) {
-        printf("Client could not create queneu");
+        printf(KRED "Client could not create q" RESET "\n");
+        clean();
         exit(EXIT_FAILURE);
     }
     msg_q_id = private_q_id;
-    struct msg_int initial_msg;
-    initial_msg . mtype = 10;
-    initial_msg . msg = key + getpid();
-    initial_msg . pid = getpid();
+    gq_name = q_name;
+    char* initial_msg;
+    initial_msg[MSG_TYPE] = 10;
+    strcpy(&initial_msg[MSG], q_name);
+    initial_msg[MSG_PS_ID] = getpid();
 
-    if(msgsnd(q_id, &initial_msg, MSG_INT_SIZE,0)) {
+    if(mq_send(q_id, initial_msg, MAX_MSG_SIZE, 0)) {
             printf("Failed to communicate with server with errno: %s\n", strerror(errno));
             clean();
             exit(EXIT_FAILURE);
     }
-    struct msg_int msg_int_buffer;
+    char* msg_op_buffer = (char*) malloc(sizeof(char)*MAX_MSG_SIZE);
     int client_id;
 
-    read_msg_from_server(private_q_id, &msg_int_buffer, MSG_INT_SIZE, 1, 0);
+    read_msg_from_server(private_q_id, msg_op_buffer, MAX_MSG_SIZE);
 
-    client_id = msg_int_buffer.msg;
-    printf(KGRN "Got client q id number: %i, from server with pid %i\nStarting sending requests...\n" RESET, client_id, msg_int_buffer.pid);
-
-    struct msg_operation* op_msg = (struct msg_operation*) malloc(sizeof(struct msg_operation));
+    client_id = msg_op_buffer[MSG];
+    printf(KGRN "Got client q id number: %i, from server with pid %i\nStarting sending requests..." RESET "\n", client_id, msg_op_buffer[MSG_PS_ID]);
 
     for(int i = 0; i < args.op_number; i++) {
-        op_msg -> client_id = client_id;
+        msg_op_buffer[CLIENT_ID] = client_id;
         if(strcmp(args.operations[i][0], "MIRROR") == 0) {
-             op_msg -> mtype = 2;
-             strcpy(op_msg->op, args.operations[i][1]);
+             msg_op_buffer[MSG_TYPE] = 2;
+             strcpy(&msg_op_buffer[MSG], args.operations[i][1]);
         }
         else if (strcmp(args.operations[i][0], "CALC") == 0) {
-             op_msg -> mtype = 3;
-             strcpy(op_msg->op, args.operations[i][1]);
-             op_msg -> data1 = strtol(args.operations[i][2], NULL, 10);
-             op_msg -> data2 = strtol(args.operations[i][3], NULL, 10);
+             msg_op_buffer[MSG_TYPE] = 3;
+             strcpy(&msg_op_buffer[MSG], args.operations[i][1]);
+             msg_op_buffer[DATA1] = 0;//args.operations[i][2];
+             msg_op_buffer[DATA2] = 0;//args.operations[i][3];
         }
         else if (strcmp(args.operations[i][0], "TIME") == 0) {
-             op_msg -> mtype = 4;
+             msg_op_buffer[MSG_TYPE] = 4;
         }
         else if (strcmp(args.operations[i][0], "END") == 0) {
-             op_msg -> mtype = 5;
+             msg_op_buffer[MSG_TYPE] = 5;
         }
         else {
             printf(KRED "Uknown command\n" RESET);
@@ -155,21 +162,20 @@ int main( int argc, char* argv[] ) {
         }
         printf("Sending %s \n", args.operations[i][0]);
 
-        if(msgsnd(q_id, op_msg, MSG_OP_SIZE, 0)) {
+        if(mq_send(q_id, msg_op_buffer, MAX_MSG_SIZE, 0)) {
                 printf("Failed to send request %s to server with errno: %s\n", args.operations[i][0], strerror(errno));
         } else if (strcmp(args.operations[i][0], "END") != 0) {
-            read_msg_from_server(private_q_id, op_msg, MSG_OP_SIZE, 2, 0);
-            printf(KGRN "Got response: %s\n" RESET, op_msg->op);
+            read_msg_from_server(private_q_id, msg_op_buffer, MAX_MSG_SIZE);
+            printf(KGRN "Got response: %s\n" RESET, &msg_op_buffer[MSG]);
         }
     }
 
 
 
-    free(op_msg);
+    free(msg_op_buffer);
     for(int i = 0; i < args.op_number; i++)
         free(args.operations[i]);
     free(args.operations);
-
 
 
     clean();

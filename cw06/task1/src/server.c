@@ -19,11 +19,6 @@ struct client_info {
     int actual_size;
 };
 
-struct parsed_args {
-    int fifo_handle;
-};
-
-
 void add_client_info(struct client_info* info, int pid, int key) {
     info -> actual_size++;
     if(info -> actual_size >= info -> size) {
@@ -37,7 +32,7 @@ void add_client_info(struct client_info* info, int pid, int key) {
 
     info -> q_id[info -> actual_size-1] = msgget(key, 0);
     if(info -> q_id[info -> actual_size-1] == -1) {
-            printf("Failed to connect to q with key : %#010x\n", key);
+            printf(KRED "Failed to connect to q with key : %#010x\n" RESET, key);
     }
     else {
         struct msg_int msg;
@@ -62,10 +57,6 @@ void change_pemissions(int q_id, int perms) {
 
 }
 
-struct parsed_args parse_args (char* path) {
-    struct parsed_args args;
-    return args;
-}
 
 void finish(int signal) {
 
@@ -105,13 +96,13 @@ int main( int argc, char* argv[] ) {
 
     key_t key = ftok(homedir, DESIRED_KEY_NUMBER);
     if(key == -1) {
-        printf("Could not create key %#010x\n", key);
+        printf(KRED "Could not create key %#010x\n" RESET, key);
         exit(EXIT_FAILURE);
     }
 
     int q_id = msgget(key, IPC_CREAT | 0660);
     if(q_id == -1) {
-        printf("Could not create quene with key %#010x\n    , trying again\n", key);
+        printf(KRED "Could not create quene with key %#010x\n    , trying again\n" RESET, key);
         q_id = msgget(key, IPC_CREAT | 0660);
         if(q_id == -1) {
             printf("Failed yet again with key %#010x, exiting\n", key);
@@ -147,21 +138,21 @@ int main( int argc, char* argv[] ) {
                  }
                  else if(msg_op_buffer.mtype == 3) {
                      printf("Doing CALC\n");
-                     int answer;
+                     float answer;
                      if(strcmp(msg_op_buffer.op, "ADD") == 0)
-                         answer = msg_op_buffer.data1 + msg_op_buffer.data2;
+                         answer = (float)msg_op_buffer.data1 + (float)msg_op_buffer.data2;
                      else if(strcmp(msg_op_buffer.op, "DIV") == 0)
-                          answer = msg_op_buffer.data1 / msg_op_buffer.data2;
+                          answer = (float)msg_op_buffer.data1 / (float)msg_op_buffer.data2;
                      else if(strcmp(msg_op_buffer.op, "MUL") == 0)
-                          answer = msg_op_buffer.data1 * msg_op_buffer.data2;
+                          answer = (float)msg_op_buffer.data1 * (float)msg_op_buffer.data2;
                      else if(strcmp(msg_op_buffer.op, "SUB") == 0)
-                          answer = msg_op_buffer.data1 - msg_op_buffer.data2;
+                          answer = (float)msg_op_buffer.data1 - (float)msg_op_buffer.data2;
                      else {
                          answer = 0;
                      }
 
                      char* str = (char*) malloc(10*sizeof(char));
-                     sprintf(str,"%i",answer);
+                     sprintf(str,"%f",answer);
                       strcpy(msg_op_buffer.op, str);
 
                  }
@@ -181,7 +172,7 @@ int main( int argc, char* argv[] ) {
                  msg_op_buffer.mtype = 2;
 
                  msgsnd(info.q_id[msg_op_buffer.client_id], &msg_op_buffer, MSG_OP_SIZE,0);
-                 printf("Send back op output to client with id %i\n", msg_op_buffer.client_id);
+                 printf(KGRN "Send back op output to client with id %i\n" RESET, msg_op_buffer.client_id);
              }
              else
                  empty = 1;
