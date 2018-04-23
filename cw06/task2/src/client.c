@@ -6,6 +6,19 @@ struct parsed_args {
     char*** operations;
 };
 
+mqd_t msg_q_id = -1;
+char* gq_name = NULL;
+
+void clean() {
+    if(msg_q_id != -1)
+        if(mq_close(msg_q_id))
+            printf("Cleaning failed\n");
+    if(gq_name != NULL)
+        if(mq_unlink(gq_name))
+            printf("Cleaning failed\n");
+}
+
+
 struct parsed_args parse_args (int argc, char* argv[]) {
 
     struct parsed_args args;
@@ -17,6 +30,11 @@ struct parsed_args parse_args (int argc, char* argv[]) {
 
         args.op_number += 1;
         if (strcmp(argv[i], "CALC") == 0) {
+            if (argc - i < 4) {
+                printf("Need more agrs for CALC\n");
+                clean();
+                exit(EXIT_FAILURE);
+            }
             args.operations = (char***) realloc(args.operations, args.op_number*sizeof(char**));
             args.operations[j] = (char**) malloc(4*sizeof(char*));
             args.operations[j][0] = argv[i];
@@ -31,6 +49,11 @@ struct parsed_args parse_args (int argc, char* argv[]) {
 
             args.operations[j][0] = argv[i];
             if (strcmp(argv[i], "MIRROR") == 0) {
+                if (argc - i < 2) {
+                    printf("Need more agrs for MIRROR\n");
+                    clean();
+                    exit(EXIT_FAILURE);
+                }
                 args.operations[j][1] = argv[i + 1];
                 i += 1;
             }
@@ -48,17 +71,6 @@ struct parsed_args parse_args (int argc, char* argv[]) {
     return args;
 }
 
-mqd_t msg_q_id = -1;
-char* gq_name = NULL;
-
-void clean() {
-    if(msg_q_id != -1)
-        if(mq_close(msg_q_id))
-            printf("Cleaning failed\n");
-    if(gq_name != NULL)
-        if(mq_unlink(gq_name))
-            printf("Cleaning failed\n");
-}
 
 
 void finish(int signal) {
@@ -70,15 +82,14 @@ void finish(int signal) {
 }
 
 void read_msg_from_server(int q_id, char* buffer, int size) {
-    printf(KWHT "Waiting for server response...\n" RESET);
     while(mq_receive(q_id, buffer, size, NULL) == -1) {
-        if (errno != ENOMSG) {
+        if (errno != EAGAIN) {
             printf("Failed to communicate with server with errno: %s\n", strerror(errno));
             clean();
             exit(EXIT_FAILURE);
         } else {
             printf(KWHT "Waiting for server response...\n" RESET);
-            sleep(2);
+            sleep(1);
         }
     }
 }
@@ -111,7 +122,7 @@ int main( int argc, char* argv[] ) {
     attr.mq_msgsize = MAX_MSG_SIZE;
     attr.mq_flags   = 0;
     attr.mq_curmsgs   = 0;
-    mqd_t private_q_id = mq_open(q_name, O_RDONLY | O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH, &attr);
+    mqd_t private_q_id = mq_open(q_name, O_RDONLY | O_EXCL | O_CREAT | O_NONBLOCK, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH, &attr);
 
     if(private_q_id == -1) {
         printf(KRED "Client could not create q" RESET "\n");
@@ -120,10 +131,12 @@ int main( int argc, char* argv[] ) {
     }
     msg_q_id = private_q_id;
     gq_name = q_name;
-    char* initial_msg;
+    char* initial_msg = (char*) malloc(sizeof(char)*MAX_MSG_SIZE);
     initial_msg[MSG_TYPE] = 10;
     strcpy(&initial_msg[MSG], q_name);
-    initial_msg[MSG_PS_ID] = getpid();
+    char* pid = (char*) malloc(sizeof(char)*10);
+    sprintf(pid, "%i", getpid());
+    strcpy(&initial_msg[MSG_PS_ID], pid);
 
     if(mq_send(q_id, initial_msg, MAX_MSG_SIZE, 0)) {
             printf("Failed to communicate with server with errno: %s\n", strerror(errno));
@@ -135,8 +148,9 @@ int main( int argc, char* argv[] ) {
 
     read_msg_from_server(private_q_id, msg_op_buffer, MAX_MSG_SIZE);
 
-    client_id = msg_op_buffer[MSG];
-    printf(KGRN "Got client q id number: %i, from server with pid %i\nStarting sending requests..." RESET "\n", client_id, msg_op_buffer[MSG_PS_ID]);
+    client_id = strtol(&msg_op_buffer[MSG], NULL, 10);
+    int server_pid = strtol(&msg_op_buffer[MSG_PS_ID], NULL, 10);
+    printf(KGRN "Got client q id number: %i, from server with pid %i\nStarting sending requests..." RESET "\n", client_id, server_pid);
 
     for(int i = 0; i < args.op_number; i++) {
         msg_op_buffer[CLIENT_ID] = client_id;
@@ -145,10 +159,15 @@ int main( int argc, char* argv[] ) {
              strcpy(&msg_op_buffer[MSG], args.operations[i][1]);
         }
         else if (strcmp(args.operations[i][0], "CALC") == 0) {
-             msg_op_buffer[MSG_TYPE] = 3;
-             strcpy(&msg_op_buffer[MSG], args.operations[i][1]);
-             msg_op_buffer[DATA1] = 0;//args.operations[i][2];
-             msg_op_buffer[DATA2] = 0;//args.operations[i][3];
+            if(strlen(args.operations[i][2]) >= 6 ||  strlen(args.operations[i][3]) >= 6) {
+                printf(KRED "Integer to long in CALC operation, not doin that" RESET "\n");
+                continue;
+            }
+            msg_op_buffer[MSG_TYPE] = 3;
+            strcpy(&msg_op_buffer[MSG], args.operations[i][1]);
+            strcpy(&msg_op_buffer[DATA1], args.operations[i][2]);
+            strcpy(&msg_op_buffer[DATA2], args.operations[i][3]);
+
         }
         else if (strcmp(args.operations[i][0], "TIME") == 0) {
              msg_op_buffer[MSG_TYPE] = 4;
@@ -170,7 +189,9 @@ int main( int argc, char* argv[] ) {
         }
     }
 
-
+    union sigval sigrtmin_1_info;
+    sigrtmin_1_info.sival_int = private_q_id;
+    sigqueue(server_pid, SIGRTMIN + 1, sigrtmin_1_info);
 
     free(msg_op_buffer);
     for(int i = 0; i < args.op_number; i++)

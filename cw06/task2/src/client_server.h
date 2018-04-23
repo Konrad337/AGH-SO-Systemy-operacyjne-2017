@@ -34,11 +34,11 @@
                           sprintf(server_q_name,"/q_SERVER"); \
 
 #define MSG_TYPE 0
-#define MSG_PS_ID 1
-#define DATA1 2
-#define DATA2 3
-#define CLIENT_ID 3
-#define MSG 10
+#define DATA1 4
+#define DATA2 12
+#define CLIENT_ID 1
+#define MSG_PS_ID 18
+#define MSG 28
 
 
 #endif

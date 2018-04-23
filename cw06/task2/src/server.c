@@ -39,16 +39,22 @@ void add_client_info(struct client_info* info, int pid, char *name) {
             printf(KRED "Failed to connect to q with name : %s\n" RESET, name);
     }
     else {
-        char* msg = (char*) malloc(sizeof(char)*MAX_MSG_SIZE);;
-        msg[0] = 1;
-        msg[MSG] = info -> actual_size-1;
-        msg[MSG_PS_ID] = getpid();
+        char* msg = (char*) malloc(sizeof(char)*MAX_MSG_SIZE);
+        char* pid = (char*) malloc(sizeof(char)*10);
+        char* client_id = (char*) malloc(sizeof(char)*10);
+        sprintf(pid, "%i", getpid());
+        sprintf(client_id, "%i", info -> actual_size-1);
+        msg[MSG_TYPE] = 1;
+        strcpy(&msg[MSG_PS_ID], pid);
+        strcpy(&msg[MSG], client_id);
+
+
         if(mq_send(info -> q_id[info -> actual_size-1], msg, MAX_MSG_SIZE, 0)) {
                 printf("Failed to communicate with client with errno: %s\n", strerror(errno));
                 clean();
                 exit(EXIT_FAILURE);
         }
-        printf("Connected to q with id: %i\n", info -> q_id[info -> actual_size-1]);
+        printf("Connected to q with id: %i, client got id %s\n", info -> q_id[info -> actual_size-1], client_id);
 }
 }
 
@@ -64,6 +70,14 @@ void change_pemissions(int q_id, int perms) {
     }
 
 }
+
+void clean_client(int signal, siginfo_t* info, void* ucontext) {
+        mqd_t id = info -> si_value . sival_int;
+        if(mq_close(id))
+            printf("Cleaning client failed\n");
+        else
+            printf("Closed q with id %i\n", id);
+    }
 
 
 void finish(int signal) {
@@ -99,13 +113,18 @@ int main( int argc, char* argv[] ) {
     grand_finale.sa_flags = 0;
     sigaction(SIGINT, &grand_finale, NULL);
 
+    struct sigaction close_client_q;
+    close_client_q.sa_sigaction = clean_client;
+    close_client_q.sa_flags = SA_SIGINFO;
+    sigaction(SIGRTMIN + 1, &close_client_q, NULL);
+
     GET_SERVER_Q_NAME;
     struct mq_attr attr;
     attr.mq_maxmsg = 10;
     attr.mq_msgsize = MAX_MSG_SIZE;
     attr.mq_flags   = 0;
     attr.mq_curmsgs   = 0;
-    mqd_t q_id = mq_open(server_q_name, O_RDONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH, &attr);
+    mqd_t q_id = mq_open(server_q_name, O_RDONLY | O_CREAT | O_EXCL | O_NONBLOCK, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH, &attr);
 
 
     if(q_id == -1) {
@@ -131,8 +150,8 @@ int main( int argc, char* argv[] ) {
         empty = 0;
         if(mq_receive(q_id, msg_op_buffer, MAX_MSG_SIZE, NULL) > 0) {
              if(msg_op_buffer[MSG_TYPE] == 10) {
-             printf("Got q name %s from pid %i \n", &msg_op_buffer[MSG], msg_op_buffer[MSG_PS_ID]);
-             add_client_info(&info, msg_op_buffer[MSG_PS_ID], &msg_op_buffer[MSG]);
+             printf("Got q name %s from pid %s \n", &msg_op_buffer[MSG], &msg_op_buffer[MSG_PS_ID]);
+             add_client_info(&info, strtol(&msg_op_buffer[MSG_PS_ID], NULL, 10), &msg_op_buffer[MSG]);
          }
          else {
                 printf("Got operetion request from client with id %i\n", msg_op_buffer[1]);
@@ -142,18 +161,20 @@ int main( int argc, char* argv[] ) {
                  }
                  else if(msg_op_buffer[MSG_TYPE] == 3) {
                      printf("Doing CALC\n");
+                     float data1_f = (float) strtol(&msg_op_buffer[DATA1], NULL, 10);
+                     float data2_f = (float) strtol(&msg_op_buffer[DATA2], NULL, 10);
                      float answer;
                      if(strcmp(&msg_op_buffer[MSG], "ADD") == 0)
-                         /*answer = (float)&msg_op_buffer[DATA1] + (float)&msg_op_buffer[DATA2];
+                         answer = data1_f + data2_f;
                      else if(strcmp(&msg_op_buffer[MSG], "DIV") == 0)
-                          //answer = (float)&msg_op_buffer[DATA1] / (float)&msg_op_buffer[DATA2];
+                          answer = data1_f / data2_f;
                      else if(strcmp(&msg_op_buffer[MSG], "MUL") == 0)
-                          //answer = (float)&msg_op_buffer[DATA1] * (float)&msg_op_buffer[DATA2];
+                          answer = data1_f * data2_f;
                      else if(strcmp(&msg_op_buffer[MSG], "SUB") == 0)
-                          //answer = (float)&msg_op_buffer[DATA1] - (float)&msg_op_buffer[DATA2];
-                     else {*/
+                          answer = data1_f - data2_f;
+                     else {
                          answer = 0;
-
+                     }
 
                      char* str = (char*) malloc(MAX_MSG_SIZE*sizeof(char));
                      sprintf(str,"%f",answer);
@@ -170,8 +191,8 @@ int main( int argc, char* argv[] ) {
                  }
                  else if(msg_op_buffer[MSG_TYPE] == 5) {
                      printf("Doing END\n");
-                      ended = 1;
-                      continue;
+                     ended = 1;
+                     continue;
                  }
                  msg_op_buffer[MSG_TYPE] = 2;
                  int client_id = msg_op_buffer[CLIENT_ID];
@@ -186,12 +207,13 @@ int main( int argc, char* argv[] ) {
          }
              else
                  empty = 1;
-
-
-
     }
 
-    free(server_q_name);
+
+
+
+
     clean();
+    free(server_q_name);
     return 0;
 }
