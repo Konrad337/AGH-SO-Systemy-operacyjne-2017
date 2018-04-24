@@ -1,4 +1,0 @@
-/home/konrad/Desktop/SO/cw06/task1/CMakeFiles/edit_cache.dir
-/home/konrad/Desktop/SO/cw06/task1/CMakeFiles/rebuild_cache.dir
-/home/konrad/Desktop/SO/cw06/task1/CMakeFiles/server.dir
-/home/konrad/Desktop/SO/cw06/task1/CMakeFiles/client.dir

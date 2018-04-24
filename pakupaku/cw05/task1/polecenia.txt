@@ -1,2 +1,0 @@
-ls -l | grep bin
-ps | grep bash
