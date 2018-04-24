@@ -15,6 +15,7 @@ install(TARGETS cArrayShared DESTINATION /home/konrad/Desktop/SO/lab1/task3/b/li
 #Zamiast instalować je wszędzie można po prostu w pozostałych CMejkach dać ścieżkę tutaj, ale w sumie bez różnicy wiec zostawiam
 #sudo make install w task1, żeby grało
 
+
 #static
 add_library(cArrayStatic STATIC ${SOURCES})
 target_compile_definitions(cArrayStatic PUBLIC -DSTATIC)
