@@ -1,0 +1,14 @@
+*/*/cmake-build-debug/*
+*/*/CMakeFiles/*
+*/*/bin/*
+*/*/CMakeCache.txt
+*/*/Makefile
+*/*/cmake_install.cmake
+*/*/*.o
+*/*/*/cmake-build-debug/*
+*/*/*/CMakeFiles/*
+*/*/*/bin/*
+*/*/*/CMakeCache.txt
+*/*/*/Makefile
+*/*/*/cmake_install.cmake
+*/*/*/*.o
