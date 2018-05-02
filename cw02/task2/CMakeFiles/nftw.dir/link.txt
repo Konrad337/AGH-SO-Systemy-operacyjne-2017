@@ -1,1 +1,0 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/nftw.dir/task.c.o  -o bin/nftw 

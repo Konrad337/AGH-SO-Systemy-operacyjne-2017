@@ -1,2 +1,0 @@
-/usr/bin/ar qc bin/libcArrayStatic.a  CMakeFiles/cArrayStatic.dir/carray.c.o
-/usr/bin/ranlib bin/libcArrayStatic.a

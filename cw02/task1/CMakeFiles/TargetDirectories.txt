@@ -1,5 +1,0 @@
-/home/konrad/Desktop/SO/cw02/task1/CMakeFiles/rebuild_cache.dir
-/home/konrad/Desktop/SO/cw02/task1/CMakeFiles/edit_cache.dir
-/home/konrad/Desktop/SO/cw02/task1/CMakeFiles/test.dir
-/home/konrad/Desktop/SO/cw02/task1/CMakeFiles/system.dir
-/home/konrad/Desktop/SO/cw02/task1/CMakeFiles/lib.dir

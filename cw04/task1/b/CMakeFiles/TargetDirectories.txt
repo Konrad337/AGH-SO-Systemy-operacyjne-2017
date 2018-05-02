@@ -1,3 +1,0 @@
-/home/konrad/Desktop/SO/cw04/task1/b/CMakeFiles/rebuild_cache.dir
-/home/konrad/Desktop/SO/cw04/task1/b/CMakeFiles/task.dir
-/home/konrad/Desktop/SO/cw04/task1/b/CMakeFiles/edit_cache.dir
