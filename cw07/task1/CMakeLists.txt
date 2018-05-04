@@ -7,14 +7,14 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/../bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(SERVER_SOURCES ${CMAKE_SOURCE_DIR}/server.c)
-set(CLIENT_SOURCES ${CMAKE_SOURCE_DIR}/client.c)
+set(SERVER_SOURCES ${CMAKE_SOURCE_DIR}/barber.c)
+set(CLIENT_SOURCES ${CMAKE_SOURCE_DIR}/clients.c)
 
 
 #normal
-add_executable(server ${SERVER_SOURCES})
-add_executable(client ${CLIENT_SOURCES})
+add_executable(barber ${SERVER_SOURCES})
+add_executable(clients ${CLIENT_SOURCES})
 
 
-set_property(TARGET server PROPERTY C_STANDARD 99)
-set_property(TARGET client PROPERTY C_STANDARD 99)
+set_property(TARGET barber PROPERTY C_STANDARD 99)
+set_property(TARGET clients PROPERTY C_STANDARD 99)

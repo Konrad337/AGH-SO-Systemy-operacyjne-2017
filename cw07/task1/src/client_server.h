@@ -12,6 +12,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
+#include <sys/shm.h>
+
 
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -23,21 +25,8 @@
 #define RESET "\x1B[0m"
 
 #define DESIRED_KEY_NUMBER 42
-#define MSG_INT_SIZE sizeof(struct msg_int) - sizeof(long)
-#define MSG_OP_SIZE sizeof(struct msg_operation) - sizeof(long)
-#define MAX_MSG_SIZE 64
+#define SHARED_MEMORY_SIZE 1024
 
-struct msg_int {
-  long mtype;
-  int msg;
-  int pid;
-};
-struct msg_operation {
-  long mtype;
-  char op[MAX_MSG_SIZE];
-  int data1;
-  int data2;
-  int client_id;
-};
+
 
 #endif
