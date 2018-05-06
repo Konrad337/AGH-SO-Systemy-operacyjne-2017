@@ -70,6 +70,8 @@ int main( int argc, char* argv[] ) {
     grandFinale.sa_flags = 0;
     sigaction(SIGINT, &grandFinale, NULL);
 
+
+
     if(argc != 2)
         exit(EXIT_FAILURE);
 
