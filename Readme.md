@@ -11,3 +11,6 @@ czas zegarowy - gettimeofday
 czas uzytkownika - get getrusage
 
 valgrind do wycieków, strace do sprawdzania dlaczego zawsze nie działa
+
+5tego nie polecam bo sobie utrudniłem bardzo, niektóre, jak sygnały, musiałem
+dużo zmieniać zanim wreszcie przyjął
