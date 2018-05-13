@@ -15,16 +15,11 @@ void finish(int signal) {
 
 }
 
-void do_nothing(int signal, siginfo_t* info, void* ucontext) {
-    }
-
-
 void haircut_time(int client_number) {
 
     struct timespec cur_time;
-    semaphore_op2(0, 1, 2);
-    clock_gettime(CLOCK_REALTIME, &cur_time);
-    printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
+
+
     semaphore_op(-1, 1);
     //printf("%i\n", semctl(semaphore_id, 1, GETVAL, NULL));
     semaphore_op2(0, 1, 2);
@@ -53,14 +48,6 @@ int main( int argc, char* argv[] ) {
     sigemptyset(&grand_finale.sa_mask);
     sigaction(SIGINT, &grand_finale, NULL);
 
-    struct sigaction haircut_times;
-    haircut_times.sa_sigaction = do_nothing;
-    haircut_times.sa_flags = SA_SIGINFO;
-    sigset_t mask;
-    sigfillset(&mask);
-    sigdelset(&mask,SIGUSR1);
-    sigdelset(&mask,SIGINT);
-    sigaction(SIGUSR1, &haircut_times, NULL);
 
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) == NULL) {
@@ -129,6 +116,9 @@ int main( int argc, char* argv[] ) {
                 m_pointer[GHOST_CHAIR]++;
 
                 semaphore_op2(0, 1, 0);
+                semaphore_op2(0, 1, 2);
+                clock_gettime(CLOCK_REALTIME, &cur_time);
+                printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
                 m_pointer[GHOST_CHAIR]--;
                 m_pointer[CHAIRS_TAKEN]--;
                 m_pointer[FIFO_START + i] = 0;
@@ -139,12 +129,12 @@ int main( int argc, char* argv[] ) {
                 done++;
             }
             else {
-                semaphore_op(-1, 0);
+
 
                 clock_gettime(CLOCK_REALTIME, &cur_time);
                 printf(KYEL "%-10i %li.%-20li No empty seats" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
 
-
+                semaphore_op(-1, 0);
             }
 
         } else {
@@ -163,7 +153,9 @@ int main( int argc, char* argv[] ) {
             semaphore_op(-1, 0);
             semaphore_op(0, 3);
 
-
+            semaphore_op2(0, 1, 2);
+            clock_gettime(CLOCK_REALTIME, &cur_time);
+            printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
             haircut_time(client_number);
 
         }

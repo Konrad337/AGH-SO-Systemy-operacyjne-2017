@@ -4,6 +4,7 @@ void clean() {
     if (shared_memory_adress != NULL)
         if( munmap(shared_memory_adress, SHARED_MEMORY_SIZE) == -1)
             perror("Could not free shared memory: ");
+
 }
 
 void finish(int signal) {
@@ -22,9 +23,7 @@ void do_nothing(int signal, siginfo_t* info, void* ucontext) {
 void haircut_time(int client_number) {
 
     struct timespec cur_time;
-    semaphore_op2(0, 1, semaphore_id_2);
-    clock_gettime(CLOCK_REALTIME, &cur_time);
-    printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
+
     semaphore_op(-1, semaphore_id_1);
     //printf("%i\n", semctl(semaphore_id, 1, GETVAL, NULL));
     semaphore_op2(0, 1, semaphore_id_2);
@@ -128,6 +127,9 @@ int main( int argc, char* argv[] ) {
                 m_pointer[GHOST_CHAIR]++;
 
                 semaphore_op2(0, 1, semaphore_id_0);
+                semaphore_op2(0, 1, semaphore_id_2);
+                clock_gettime(CLOCK_REALTIME, &cur_time);
+                printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
                 m_pointer[GHOST_CHAIR]--;
                 m_pointer[CHAIRS_TAKEN]--;
                 m_pointer[FIFO_START + i] = 0;
@@ -162,7 +164,9 @@ int main( int argc, char* argv[] ) {
             semaphore_op(-1, semaphore_id_0);
             semaphore_op(0, semaphore_id_3);
 
-
+            semaphore_op2(0, 1, semaphore_id_2);
+            clock_gettime(CLOCK_REALTIME, &cur_time);
+            printf(KBLU "%-10i %li.%-20li Invited to haircut" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec);
             haircut_time(client_number);
 
         }

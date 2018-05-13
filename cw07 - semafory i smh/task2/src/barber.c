@@ -14,6 +14,12 @@ void clean() {
     sem_close(semaphore_id_2);
     sem_close(semaphore_id_3);
     sem_close(semaphore_id_4);
+    sem_unlink(DESIRED_KEY_NUMBER2);
+    sem_unlink(DESIRED_KEY_NUMBER3);
+    sem_unlink(DESIRED_KEY_NUMBER4);
+    sem_unlink(DESIRED_KEY_NUMBER5);
+    sem_unlink(DESIRED_KEY_NUMBER6);
+
 }
 
 struct client_info {
@@ -107,11 +113,11 @@ int main( int argc, char* argv[] ) {
         m_pointer[i] = 0;
     }
 
-    sem_t* s_id_0 = sem_open(DESIRED_KEY_NUMBER2, O_RDWR | O_CREAT | O_EXCL , 0660, 0);
-    sem_t* s_id_1 = sem_open(DESIRED_KEY_NUMBER3, O_RDWR | O_CREAT | O_EXCL, 0660, 0);
-    sem_t* s_id_2 = sem_open(DESIRED_KEY_NUMBER4, O_RDWR | O_CREAT | O_EXCL, 0660, 0);
-    sem_t* s_id_3 = sem_open(DESIRED_KEY_NUMBER5, O_RDWR | O_CREAT | O_EXCL, 0660, 0);
-    sem_t* s_id_4 = sem_open(DESIRED_KEY_NUMBER6, O_RDWR | O_CREAT | O_EXCL, 0660, 0);
+    sem_t* s_id_0 = sem_open(DESIRED_KEY_NUMBER2, O_RDWR | O_CREAT | O_EXCL , 0660, 1);
+    sem_t* s_id_1 = sem_open(DESIRED_KEY_NUMBER3, O_RDWR | O_CREAT | O_EXCL, 0660, 1);
+    sem_t* s_id_2 = sem_open(DESIRED_KEY_NUMBER4, O_RDWR | O_CREAT | O_EXCL, 0660, 1);
+    sem_t* s_id_3 = sem_open(DESIRED_KEY_NUMBER5, O_RDWR | O_CREAT | O_EXCL, 0660, 1);
+    sem_t* s_id_4 = sem_open(DESIRED_KEY_NUMBER6, O_RDWR | O_CREAT | O_EXCL, 0660, 1);
 
 
     semaphore_id_0 = s_id_0;
@@ -126,7 +132,7 @@ int main( int argc, char* argv[] ) {
     unsigned int client_number;
     m_pointer[CHAIRS] = chairs;
     m_pointer[GHOST_CHAIR] = 0;
-    m_pointer[SLEEPY_MAN_PID] = (int) getpid();
+    m_pointer[SLEEPY_MAN_PID] = getpid();
 
     while(1) {
 

@@ -63,14 +63,18 @@ sem_t* semaphore_id_4 = 0;
 
 int semaphore_op(int op, sem_t *sem) {
 
-    if(op == 1)
-        return sem_post(sem);
-    else if(op == -1)
-        return sem_wait(sem);
+    if(op == -1) {
+        if(sem_post(sem) == -1)
+             perror("sem_post failed");
+         }
+    else if(op == 1) {
+        if(sem_wait(sem) == -1)
+             perror("sem_wait failed");
+        }
     else if(op == 0) {
         int *valp = (int*) malloc(sizeof(int));
-        *valp = 1;
-        while(*valp > 0)
+        *valp = 0;
+        while(*valp <= 0)
             sem_getvalue(sem, valp);
     }
     return 0;

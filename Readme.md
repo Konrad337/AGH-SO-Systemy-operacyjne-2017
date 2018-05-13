@@ -1,6 +1,6 @@
 Nie pisać ręcznie mejkfajla (Kurdziel)!!!
 
-CMAKE, autotoolsy
+CMAKE, autotoolsy, na centOSie cmake3 (!), wszystko pisane z palca od podstaw więc nie zawsze I klasa, ale łatwiej ogarnąć
 
 Nie kopiować do dyanamicznego, lepiej flagi i warunkowe kompilacje
 

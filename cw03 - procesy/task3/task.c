@@ -165,8 +165,7 @@ int main( int argc, char* argv[] ) {
             exit(EXIT_SUCCESS);
 
         } else {
-
-
+            
             gettimeofday(&end, 0);
             waitpid(pid, &status, 0);
               if(errno == ECHILD)

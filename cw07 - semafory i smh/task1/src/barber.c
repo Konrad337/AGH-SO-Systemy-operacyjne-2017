@@ -55,12 +55,6 @@ void haircut_time(int id) {
 
 }
 
-void do_nothing(int signal, siginfo_t* info, void* ucontext) {
-
-
-    }
-
-
 int main( int argc, char* argv[] ) {
 
     struct timespec cur_time;
@@ -69,16 +63,6 @@ int main( int argc, char* argv[] ) {
     grand_finale.sa_handler = finish;
     grand_finale.sa_flags = 0;
     sigaction(SIGINT, &grand_finale, NULL);
-
-    struct sigaction sleep_time;
-    sleep_time.sa_sigaction = do_nothing;
-    sleep_time.sa_flags = SA_SIGINFO;
-    sigset_t mask;
-    sigfillset(&mask);
-    sigdelset(&mask,SIGUSR1);
-    sigdelset(&mask,SIGINT);
-    sleep_time.sa_mask = mask;
-    sigaction(SIGUSR1, &sleep_time, NULL);
 
     if(argc < 2)
         exit(EXIT_FAILURE);
