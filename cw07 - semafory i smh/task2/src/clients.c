@@ -114,9 +114,15 @@ int main( int argc, char* argv[] ) {
                 int taken = m_pointer[CHAIRS_TAKEN]++;
 
                 int i = 0;
-                while(i < (int)(FIFO_END - FIFO_START) && m_pointer[FIFO_START + i] != 0)
+                int qfix = 1;
+                while(i < (int)(FIFO_END - FIFO_START) && (m_pointer[FIFO_START + i] != 0 || qfix < m_pointer[CHAIRS_TAKEN])) {
+                    if(m_pointer[FIFO_START + i] > 0)
+                        qfix++;
                     i++;
+
+                    }
                 m_pointer[FIFO_START + i] = client_number;
+                //printf("%i %i %i\n", m_pointer[FIFO_START + i], i, qfix);
 
                 clock_gettime(CLOCK_REALTIME, &cur_time);
                 printf(KGRN "%-10i %li.%-20li Seat number %i taken" RESET "\n", client_number, cur_time.tv_sec, cur_time.tv_nsec, taken);
