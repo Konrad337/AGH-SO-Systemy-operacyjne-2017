@@ -14,4 +14,5 @@ valgrind do wycieków, strace do sprawdzania dlaczego zawsze nie działa
 
 5tego nie polecam bo sobie utrudniłem bardzo, niektóre, jak sygnały, musiałem
 dużo zmieniać zanim wreszcie przyjął, ale nie zdarzyło się, żebym coś prznyniósł
-zrobione i nie było ostatecznie przyjęte
+zrobione i nie było ostatecznie przyjęte, socketów nie polecam bo to jest tak po
+najmniejszej linii oporu jak się da i jest dużo mimi bugów
