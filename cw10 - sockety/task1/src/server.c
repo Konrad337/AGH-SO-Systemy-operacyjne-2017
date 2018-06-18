@@ -1,7 +1,7 @@
 #include "client_server.h"
 #include <math.h>
 #include <limits.h>
-
+#define _GNU_SOURCE
 
 pthread_t server_thread;
 pthread_t server_thread2;
@@ -99,7 +99,7 @@ void *run_server_name(void *args) {
             if(!client_name_exists) {
                 strcpy(global_client_info.client_name[global_client_info.client_number], buf -> string_msg);
                 global_client_info.client_fd[global_client_info.client_number] = clientfd;
-                ev[global_client_info.client_number].events = EPOLLIN | EPOLLET;
+                ev[global_client_info.client_number].events = EPOLLIN | EPOLLRDHUP | EPOLLET;
                 ev[global_client_info.client_number] .data.fd= clientfd;
                 if(epoll_ctl(epfd, EPOLL_CTL_ADD, clientfd, &ev[global_client_info.client_number]) < 0) {
                     printf("Error while adding fd to epfd\n");
@@ -174,7 +174,7 @@ void *run_server_ip(void *args) {
             if(!client_name_exists) {
                 strcpy(global_client_info.client_name[global_client_info.client_number], buf -> string_msg);
                 global_client_info.client_fd[global_client_info.client_number] = clientfd;
-                ev[global_client_info.client_number].events = EPOLLIN | EPOLLET;
+                ev[global_client_info.client_number].events = EPOLLIN | EPOLLRDHUP | EPOLLET;
                 ev[global_client_info.client_number] .data.fd= clientfd;
                 if(epoll_ctl(epfd, EPOLL_CTL_ADD, clientfd, &ev[global_client_info.client_number]) < 0) {
                     printf("Error while adding fd to epfd\n");
@@ -203,6 +203,17 @@ void *run_answer_server(void *args) {
         if(nfds < 0) {
             printf("Epoll error %i\n", epfd);
         }
+        if ((event.events & EPOLLHUP) == EPOLLHUP) {
+            int fd = event.data.fd;
+            if(epoll_ctl(epfd, EPOLL_CTL_DEL, fd, &event) != 0) {
+            }
+            for(int i = 0; i < MAX_CLIENTS; i++) {
+                if(global_client_info.client_fd[i] == fd) {
+                    global_client_info.client_fd[i] = 0;
+                }
+            }
+        }
+
         for(int i = 0; i < nfds; i++) {
             int fd = event.data.fd;
             recv(fd, buf, sizeof(struct message), 0);
@@ -260,10 +271,17 @@ int main( int argc, char* argv[] ) {
         strcpy(buf -> string_msg, op.operation);
         buf -> int_msg1 = op.op1;
         buf -> int_msg2 = op.op2;
-        send(global_client_info.client_fd[op_number % global_client_info.client_number], buf, sizeof(struct message), 0);
-        printf("Sent req number %i to client %i with fd %d\n", buf -> client_num, op_number % global_client_info.client_number, global_client_info.client_fd[op_number % global_client_info.client_number]);
+        int x = 0;
+        while(global_client_info.client_fd[(op_number + x) % global_client_info.client_number] == 0)
+            x++;
+        send(global_client_info.client_fd[(op_number + x) % global_client_info.client_number], buf, sizeof(struct message), 0);
+        printf("Sent req number %i to client %i with fd %d\n", buf -> client_num, (op_number + x) % global_client_info.client_number, global_client_info.client_fd[(op_number + x) % global_client_info.client_number]);
         op_number++;
     }
+
+
+
+
 
 
     pthread_join(server_thread, NULL);
